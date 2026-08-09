@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BraisedCutlassfish
   m_EditorClassIdentifier: 
   cookingName: Braised Cutlassfish
-  cookingImage: {fileID: 21300000, guid: 213c5fa69571ac54a8a11bcf603a99b4, type: 3}
+  cookingImage: {fileID: 21300000, guid: 7f293a9a97e19ad4fbd0519e9b1918b4, type: 3}
   price: 0
   needfood:
   - food: {fileID: 11400000, guid: 35b9590f0c81aa449b1cda48dd689fff, type: 2}

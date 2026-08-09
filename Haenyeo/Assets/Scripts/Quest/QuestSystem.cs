@@ -66,7 +66,6 @@ public class QuestSystem : MonoBehaviour
     private void Awake()
     {
         questDatabase = Resources.Load<QuestDatabase>("QuestDatabase");
-        Debug.Log("hi");
         achievementDatabase = Resources.Load<QuestDatabase>("AchievementDatabase");
 
         foreach (var achievement in achievementDatabase.Quests)

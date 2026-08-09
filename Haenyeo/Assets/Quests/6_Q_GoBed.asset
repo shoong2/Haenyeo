@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
+  m_Name: 6_Q_GoBed
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: 58e88a30dcba71d4bad232d1b382ccb9, type: 2}
+  icon: {fileID: 0}
+  codeName: 32139
+  displayName: "\uC9D1\uC73C\uB85C \uAC00\uC11C \uC7A0\uC790\uAE30"
+  description: "\uC9D1\uC73C\uB85C \uB3CC\uC544\uAC00\uC11C \uC790\uACE0 \uC77C\uC5B4\uB098\uC11C\n\uBC14\uB2E4\uB85C
+    \uB098\uAC00\uC790"
+  taskGroups:
+  - tasks:
+    - {fileID: 11400000, guid: d8f1142d4d4770f4eb7fc339891f925a, type: 2}
+  - tasks:
+    - {fileID: 11400000, guid: 2280ce0de1d8638428fee2a5fd08fba4, type: 2}
+  people:
+  - Room_Player
+  - Won
+  rewards: []
+  useAutoComplete: 1
+  isCancelable: 0
+  isSavable: 0
+  isNotifier: 1
+  isCount: 0
+  acceptionConditions:
+  - {fileID: 11400000, guid: c96490b6a7977744f83e1368515e7812, type: 2}
+  cancelConditions: []

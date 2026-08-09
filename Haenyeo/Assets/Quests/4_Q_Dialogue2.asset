@@ -20,12 +20,17 @@ MonoBehaviour:
   taskGroups:
   - tasks:
     - {fileID: 11400000, guid: fe783cba3beaf174b8380711ddf36e90, type: 2}
+  people:
+  - Room_Player
+  - Yeong
+  - Won
   rewards:
   - {fileID: 11400000, guid: 1d888023b048899428e1a2a6efac61e3, type: 2}
   useAutoComplete: 1
   isCancelable: 0
   isSavable: 0
   isNotifier: 0
+  isCount: 0
   acceptionConditions:
   - {fileID: 11400000, guid: a4e6246a3d72f6f4fad88b0bb30395bb, type: 2}
   cancelConditions: []

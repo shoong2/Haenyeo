@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MusselSoup
   m_EditorClassIdentifier: 
   cookingName: mussel soup
-  cookingImage: {fileID: 21300000, guid: 213c5fa69571ac54a8a11bcf603a99b4, type: 3}
+  cookingImage: {fileID: 21300000, guid: 8db39c03f6860774cb719282c2b1083a, type: 3}
   price: 0
   needfood:
   - food: {fileID: 11400000, guid: 3bf83e7823a74fa46b48e41b03b69edb, type: 2}

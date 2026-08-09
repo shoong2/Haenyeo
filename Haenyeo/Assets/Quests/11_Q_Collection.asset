@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
+  m_Name: 11_Q_Collection
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: a4015bb9c43591c4cbdb3f8d0f2a0c60, type: 2}
+  icon: {fileID: 0}
+  codeName: 55
+  displayName: "\uC0C8\uB85C\uC6B4 \uC885\uB958\uC758 \uC7AC\uB8CC \uC218\uC9D1\uD558\uAE30"
+  description: 
+  taskGroups:
+  - tasks:
+    - {fileID: 11400000, guid: d0805cabf8cea704b88c1aaf75d10ef7, type: 2}
+  - tasks:
+    - {fileID: 11400000, guid: 91bd91f9520dcef49b20dface2738962, type: 2}
+    - {fileID: 11400000, guid: 7711fe919b576b8468cde0475d979314, type: 2}
+  people:
+  - Room_Player
+  - Won
+  - Yeong
+  rewards: []
+  useAutoComplete: 1
+  isCancelable: 0
+  isSavable: 0
+  isNotifier: 1
+  isCount: 0
+  acceptionConditions:
+  - {fileID: 11400000, guid: b8a18818391cabc4b9b2b855fde316bc, type: 2}
+  cancelConditions: []

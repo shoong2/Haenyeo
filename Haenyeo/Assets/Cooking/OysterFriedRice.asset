@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OysterFriedRice
   m_EditorClassIdentifier: 
   cookingName: Oyster fried rice
-  cookingImage: {fileID: 21300000, guid: 614e76d2f2b73af4fa83ca82c2d7a961, type: 3}
+  cookingImage: {fileID: 21300000, guid: a04d6107eddadf64084e1f4c6b170519, type: 3}
   price: 0
   needfood:
   - food: {fileID: 11400000, guid: 77442e455b8be9d498149b767cc3d5e7, type: 2}

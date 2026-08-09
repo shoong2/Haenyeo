@@ -26,7 +26,7 @@ public class QuestCompletionNotifier : MonoBehaviour
     TextMeshProUGUI titleText;
 
     [SerializeField]
-    float showTime = 3f;
+    float showTime = 1f;
 
     Queue<Quest> reservedQuests = new Queue<Quest>();
     StringBuilder stringBuilder = new StringBuilder();
@@ -78,6 +78,7 @@ public class QuestCompletionNotifier : MonoBehaviour
 
         while (reservedQuests.TryDequeue(out quest))
         {
+            SoundManager.instance.PlaySE("QuestClear");
             //string updateDescription = titleDescription.Replace("%{dn}", quest.DisplayName);
             // titleText.text = $"<b>{updateDescription}</b>";
             titleText.text = titleDescription.Replace("%{dn}", quest.DisplayName);
@@ -99,6 +100,7 @@ public class QuestCompletionNotifier : MonoBehaviour
 
     IEnumerator ShowNoticeReward(Quest quest)
     {
+        SoundManager.instance.PlaySE("Reward");
         var waitSeconds = new WaitForSeconds(showTime);
 
         if(quest.Rewards[0].rewardType.ToString() =="Item")

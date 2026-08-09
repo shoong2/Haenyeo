@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
+  m_Name: 10_Q_SubQuest
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: a4015bb9c43591c4cbdb3f8d0f2a0c60, type: 2}
+  icon: {fileID: 0}
+  codeName: 123
+  displayName: "\uC694\uB9AC\uC5D0 \uD544\uC694\uD55C \uC7AC\uB8CC\uB97C \uC218\uC9D1\uD558\uC790
+    (2)"
+  description: 
+  taskGroups:
+  - tasks:
+    - {fileID: 11400000, guid: 91fb39d9cbea06b499c6654724bb1669, type: 2}
+  - tasks:
+    - {fileID: 11400000, guid: 93e216795bb3cd84c99811fce7b8a7b0, type: 2}
+    - {fileID: 11400000, guid: ef85e8f647f6c8b4a9cfb29a2576fd1f, type: 2}
+    - {fileID: 11400000, guid: 94bf845079bd4c844823efa8dbf62d07, type: 2}
+    - {fileID: 11400000, guid: d7265eb3b8239d94d8014dc2ff0714a2, type: 2}
+  people: []
+  rewards: []
+  useAutoComplete: 1
+  isCancelable: 0
+  isSavable: 0
+  isNotifier: 0
+  isCount: 0
+  acceptionConditions:
+  - {fileID: 11400000, guid: b8a18818391cabc4b9b2b855fde316bc, type: 2}
+  cancelConditions: []

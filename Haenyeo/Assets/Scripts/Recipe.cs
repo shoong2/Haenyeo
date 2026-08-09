@@ -16,6 +16,7 @@ public class Recipe : MonoBehaviour
     public Transform ingredients;
 
     public GameObject recipeWindow;
+    public GameObject fishWindow;
 
 
     private void Awake()
@@ -40,6 +41,7 @@ public class Recipe : MonoBehaviour
     void temp(Cooking cooking)
     {
         recipeWindow.SetActive(false);
+        fishWindow.SetActive(true);
         if(ingredients.childCount!=0)
         {
             for (int i = 0; i < ingredients.childCount; i++)
@@ -51,6 +53,7 @@ public class Recipe : MonoBehaviour
             if(i<ingredients.childCount)
             {
                 ingredients.GetChild(i).gameObject.SetActive(true);
+                ingredients.GetChild(i).GetComponent<RecipeSlot>().Test(cooking.needfood[i].food);
             }
             else
             {

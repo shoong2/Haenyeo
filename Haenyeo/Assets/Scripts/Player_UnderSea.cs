@@ -32,6 +32,8 @@ public class Player_UnderSea : Player
 
     bool startSea = false; // 바다에 들어가자마자 y좌표 이상으로 올라와서 씬 이동 방지
 
+    public AudioSource dive;
+
 
    // UnderSeaGameManager gm;
     protected override void Start()
@@ -106,6 +108,10 @@ public class Player_UnderSea : Player
             camera.transform.GetComponent<CameraController>().enabled = false;
             if (transform.position.y == topEdge)
                 SceneManager.LoadScene("Sea");
+            else if(transform.position.y == bottomEdge && SceneManager.GetActiveScene().name=="UnderSea")
+            {
+                SceneManager.LoadScene("UnderSea_2");
+            }
         }
         else
             camera.transform.GetComponent<CameraController>().enabled = true;
@@ -134,6 +140,7 @@ public class Player_UnderSea : Player
 
     IEnumerator StartUnderSea()
     {
+        dive.Play();
         while (transform.position != targetPosition)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, 2f * Time.deltaTime);
@@ -145,6 +152,8 @@ public class Player_UnderSea : Player
         startSea = true;
     }
 
+
+ 
     //public void Attack()
     //{
     //    playerAnim.SetTrigger(toolManager.activeToolName);
@@ -159,7 +168,7 @@ public class Player_UnderSea : Player
     //            gm.CatchWindow(fish.transform.GetComponent<ItemPickUp>().item);
     //            if(fish!=null)
     //                inven.AcquireItem(fish.transform.GetComponent<ItemPickUp>().item);
-                
+
     //            fish.Die();
     //        }
     //    }

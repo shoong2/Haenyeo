@@ -48,6 +48,11 @@ public class GameManager : MonoBehaviour
     [Header("�����")]
     public SaveNLoad storage;
     public int index;
+
+    [Header("Quest")]
+    public TMP_Text count;
+    int countNum;
+
     private void Awake()
     {
         if(instance ==null)
@@ -122,7 +127,8 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        
+
+        //if(QuestSystem.Instance.ActiveQuests)
         //index = storage.saveData.nowIndex;
         Debug.Log(scene.name);
         mainCamera = Camera.main;
@@ -139,10 +145,23 @@ public class GameManager : MonoBehaviour
                 UnderSeaGameManager underGM = FindAnyObjectByType<UnderSeaGameManager>();
                 underSea = true;
                 underGM.storage = this.storage;
-                //if(index ==1)
-                //{
-                //    underGM.startQuestIndex_1 = true;
-                //}
+
+                foreach (var quest in QuestSystem.Instance.ActiveQuests)
+                {
+                    if (quest.IsCount != 0 && !count.gameObject.activeSelf)
+                    {
+                        count.gameObject.SetActive(true);
+                        countNum = quest.IsCount;
+                        count.text = countNum.ToString();
+                        StartCoroutine(CountDown(countNum, underGM, quest));
+
+                    }
+                    Debug.Log(quest);
+                }
+            }
+            else
+            {
+                count.gameObject.SetActive(false);
             }
 
         }
@@ -150,6 +169,23 @@ public class GameManager : MonoBehaviour
         {
             joystick.SetActive(false);  
         }
+
+    }
+
+    IEnumerator CountDown(int count, UnderSeaGameManager gm, Quest quest)
+    {
+        int getCount = count;
+        while(getCount > 0)
+        {
+            this.count.text = getCount.ToString();
+            getCount--;
+            yield return new WaitForSeconds(1f);
+        }
+
+        this.count.gameObject.SetActive(false);
+        gm.Tewak();
+        QuestSystem.Instance.Register(quest);
+
 
     }
 
@@ -162,7 +198,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckPhone()
     {
-        SoundManager.instance.PlaySE("button");
+       // SoundManager.instance.PlaySE("UIClick");
         if (phone.activeSelf)
         {
             phone.SetActive(false);

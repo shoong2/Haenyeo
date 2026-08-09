@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e5cc8d8b7ee8094aaa33a969498f951, type: 3}
+  m_Name: Task_Dialogue8
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
+  codeName: dialogue
+  description: "\uBBFC\uC11C\uB300\uD654"
+  action: {fileID: 11400000, guid: 9075c95b25fb0a041aa5c83c156a80b7, type: 2}
+  needSuccessToComplete: 1
+  initialSuccessValue: {fileID: 0}
+  CanReceiveReportsDuringCompletion: 0
+  targets:
+  - {fileID: 11400000, guid: 3661fed199df050479ae52f754e7c843, type: 2}

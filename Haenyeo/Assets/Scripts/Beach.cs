@@ -8,7 +8,7 @@ public class Beach : MonoBehaviour
 
     public UnityEvent onScene;
     public GameObject[] people;
-
+    Inventory inven;
     //���ϳ�, �����, �̴ٿ�
     Vector2[] position_1 = new Vector2[]
     {
@@ -38,26 +38,78 @@ public class Beach : MonoBehaviour
 
     void Start()
     {
-        for(int i=0; i<position_2.Length; i++)
+        foreach(var quest in QuestSystem.Instance.ActiveQuests)
         {
-            people[i].gameObject.SetActive(true);
-            people[i].transform.localPosition= position_2[i];
+            Debug.Log("In beach");
+            Debug.Log(quest.people.Length);
+            for (int i = 0; i < quest.people.Length; i++)
+            {
+                Debug.Log(i);
+                if (quest.people.Length == 3)
+                {
+                    foreach(var person in people)
+                    {
+                        if(quest.people[i] == person.name)
+                        {
+                            person.SetActive(true);
+                            person.transform.localPosition = position_1[i];
+                        }
+                    }
+                }
+                else if (quest.people.Length == 4)
+                {
+                    foreach (var person in people)
+                    {
+                        if (quest.people[i] == person.name)
+                        {
+                            person.SetActive(true);
+                            person.transform.localPosition = position_2[i];
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var person in people)
+                    {
+                        if (quest.people[i] == person.name)
+                        {
+                            person.SetActive(true);
+                            person.transform.localPosition = position_3[i];
+                        }
+                    }
+                }
+            }
         }
 
-        foreach (var quest in QuestSystem.Instance.ActiveQuests) 
+        //for (int i = 0; i < position_1.Length; i++)
+        //{
+        //    people[i].gameObject.SetActive(true);
+        //    people[i].transform.localPosition = position_1[i];
+        //}
+
+        foreach (var quest in QuestSystem.Instance.ActiveQuests)
         {
-            Debug.Log(1);
             if (quest.ContainsTarget("GoBeach"))
             {
                 onScene.Invoke();
                 break;
             }
         }
+
+        inven = FindObjectOfType<Inventory>();
     }
 
 
     public void MoveSea()
     {
         SceneManager.LoadScene("Sea");
-    }    
+    }  
+    
+    public void Bag_()
+    {
+        if (inven != null)
+            inven = FindObjectOfType<Inventory>();
+
+        inven.transform.GetChild(0).gameObject.SetActive(true);
+    }
 }

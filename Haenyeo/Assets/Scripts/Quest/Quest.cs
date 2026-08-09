@@ -41,6 +41,9 @@ public class Quest : ScriptableObject
     [SerializeField]
     TaskGroup[] taskGroups;
 
+    [Header("People")]
+    public string[] people;
+
     [Header("Reward")]
     [SerializeField]
     Reward[] rewards;
@@ -54,6 +57,8 @@ public class Quest : ScriptableObject
     bool isSavable;
     [SerializeField]
     bool isNotifier= true;
+    [SerializeField]
+    int isCount;
 
     [Header("Condition")]
     [SerializeField]
@@ -80,6 +85,7 @@ public class Quest : ScriptableObject
     public bool IsAcceptable=> acceptionConditions.All(x=>x.IsPass(this));
     public virtual bool IsSavable => isSavable;
     public bool IsNotifier => isNotifier;
+    public int IsCount => isCount;
 
     public event TaskSuccessChangedHandler onTaskSuccessChanged;
     public event CompletedHandler onCompleted;

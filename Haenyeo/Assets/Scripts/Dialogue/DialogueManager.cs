@@ -2,69 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 public class DialogueManager : MonoBehaviour
 {
-    //public UnityEngine.Events.UnityEvent endDialogue;
-
     [SerializeField] GameObject go_DialogueBar;
-    //[SerializeField] GameObject go_DialogueNameBar;
 
     [SerializeField] TMP_Text txt_Dialogue;
     [SerializeField] TMP_Text txt_Name;
 
-    Dialogue[] dialogues;
-
-    bool isDialogue = false;
-    bool isNext = false; // Æ¯Á¤ Å° ÀÔ·Â ´ë±â.
-
-    [Header("ÅØ½ºÆ® Ãâ·Â µô·¹ÀÌ")]
+    [Header("í…ìŠ¤íŠ¸ ì¶œë ¥ ë”œë ˆì´")]
     [SerializeField] float textDelay;
 
-    int lineCount = 0; // ´ëÈ­ Ä«¿îÆ®
-    int contextCount = 0; // ´ëÈ­ Ä«¿îÆ®
-
-    [Header("ÀúÀå¼Ò")]
+    [Header("ì €ì¥ì†Œ")]
     [SerializeField] SaveNLoad storage;
 
-
-    [Header("¾Ë¸²Ã¢")]
+    [Header("ì•Œë¦¼ì°½")]
     [SerializeField] Image itemBox;
 
-
-    [Header("¿øÈ­")]
+    [Header("ëŒ€í™” ìºë¦­í„° ì´ë¯¸ì§€")]
     [SerializeField] Image[] charImg;
 
+    Dialogue[] dialogues;
 
-    //QuestReporter[] reporters;
+    bool isDialogue;
+    bool isNext;
+    bool next;
+
+    int lineCount;
+    int contextCount;
+
     QuestReporter reporter;
+    Coroutine typewriterCo;
 
-    private void Start()
+    int npcLayerMask;
+    Dictionary<string, GameObject> charImgByName;
+
+    void Awake()
     {
-        //reporters = GetComponents<QuestReporter>();
+        npcLayerMask = LayerMask.GetMask("NPC");
+
+        charImgByName = new Dictionary<string, GameObject>(charImg.Length);
+        for (int i = 0; i < charImg.Length; i++)
+            charImgByName[charImg[i].name] = charImg[i].gameObject;
     }
 
-    void ShowDialogueImg(string name,bool active = true)
+    void ShowDialogueImg(string charName, bool active = true)
     {
-
-        for (int i = 0; i < charImg.Length; i++)
+        if (!active)
         {
-            if (active)
-            {
-                if (charImg[i].name == name.ToString())
-                {
-                    charImg[i].gameObject.SetActive(true);
-                }
-                else
-                    charImg[i].gameObject.SetActive(false);
-            }
-            else
+            for (int i = 0; i < charImg.Length; i++)
                 charImg[i].gameObject.SetActive(false);
+            return;
         }
 
-
+        foreach (var kv in charImgByName)
+            kv.Value.SetActive(kv.Key == charName);
     }
+
     public void ShowDialogue(Dialogue[] p_dialogues)
     {
         isDialogue = true;
@@ -72,115 +67,104 @@ public class DialogueManager : MonoBehaviour
         txt_Name.text = "";
 
         dialogues = p_dialogues;
-        Debug.Log(dialogues.Length);
-        StartCoroutine(Typewriter());
+        StartTypewriter();
+    }
+
+    void StartTypewriter()
+    {
+        if (typewriterCo != null) StopCoroutine(typewriterCo);
+        typewriterCo = StartCoroutine(Typewriter());
     }
 
     IEnumerator Typewriter()
     {
         SettingUI(true);
 
-        string t_ReplaceText = dialogues[lineCount].contexts[contextCount];
-        t_ReplaceText = t_ReplaceText.Replace("'", ",");
-        t_ReplaceText = t_ReplaceText.Replace("\\n", "\n");
+        string t_ReplaceText = dialogues[lineCount].contexts[contextCount]
+            .Replace("'", ",")
+            .Replace("\\n", "\n");
 
         txt_Name.text = dialogues[lineCount].name[contextCount];
         ShowDialogueImg(txt_Name.text);
-        for(int i=0; i<t_ReplaceText.Length; i++)
-        {
-            txt_Dialogue.text += t_ReplaceText[i];
-            yield return new WaitForSecondsRealtime(textDelay);
-        }
-        isNext = true;
 
-        
+        var wait = new WaitForSeconds(textDelay);
+        for (int i = 0; i < t_ReplaceText.Length; i++)
+        {
+            if (next)
+            {
+                txt_Dialogue.text = t_ReplaceText;
+                next = false;
+                break;
+            }
+
+            txt_Dialogue.text = t_ReplaceText.Substring(0, i + 1);
+            yield return wait;
+        }
+
+        isNext = true;
+        typewriterCo = null;
     }
 
     void SettingUI(bool p_flag)
     {
         go_DialogueBar.SetActive(p_flag);
-        //go_DialogueNameBar.SetActive(p_flag);
     }
 
-    private void Update()
+    void Update()
     {
-
         if (isDialogue)
         {
-            if (isNext)
+            if (Input.GetMouseButtonDown(0))
             {
-                if (Input.GetMouseButtonDown(0))
+                if (!isNext)
+                {
+                    next = true;
+                }
+                else
                 {
                     isNext = false;
                     txt_Dialogue.text = "";
-                    if(++contextCount < dialogues[lineCount].contexts.Length)
+
+                    if (++contextCount < dialogues[lineCount].contexts.Length)
                     {
-                        StartCoroutine(Typewriter());
+                        StartTypewriter();
                     }
                     else
                     {
                         contextCount = 0;
-                        if(++lineCount<dialogues.Length)
-                        {
-                            StartCoroutine(Typewriter());
-                        }
+                        if (++lineCount < dialogues.Length)
+                            StartTypewriter();
                         else
-                        {
                             EndDialogue();
-                        }
                     }
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                contextCount = dialogues[lineCount].contexts.Length - 2;
+            }
+
+            return;
         }
 
-  
-
-        if (Input.GetMouseButtonDown(0) && !isDialogue) //´ëÈ­ Å¬¸¯
+        if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, npcLayerMask);
 
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, LayerMask.GetMask("NPC"));
+            if (!hit) return;
 
-            //QuestSystem.Instance.ActiveQuests
-
-
-            if (hit)
+            foreach (var quest in QuestSystem.Instance.ActiveQuests)
             {
-                
-                foreach (var quest in QuestSystem.Instance.ActiveQuests)
+                if (quest.CurrentTaskGroup.ContainsTarget(hit.collider.tag))
                 {
-              
-                    Debug.Log(quest.CurrentTaskGroup);
-                    Debug.Log(quest.CurrentTaskGroup.ContainsTarget(hit.collider.tag));
-                    Debug.Log(hit.collider.tag);
-                    if (quest.CurrentTaskGroup.ContainsTarget(hit.collider.tag))
-                    {
-                        reporter = hit.collider.gameObject.GetComponent<QuestReporter>();
-                        ShowDialogue(DatabaseManager.instance.GetDialogue(storage.saveData.nowIndex));
-                    }
-                       // Debug.Log("Success");
-
+                    reporter = hit.collider.gameObject.GetComponent<QuestReporter>();
+                    ShowDialogue(DatabaseManager.instance.GetDialogue(storage.saveData.nowIndex));
+                    break;
                 }
-              
             }
         }
-
-        if(Input.GetKeyDown(KeyCode.Q))
-        {
-            contextCount = dialogues[lineCount].contexts.Length - 2;
-        }
-        
-    }
-
-    bool SetSystemIndex(int index, RaycastHit2D hit, string character, string SceneName)
-    {
-        if (storage.saveData.questAllCount == index && hit.collider.tag == character
-            && SceneManager.GetActiveScene().name == SceneName)
-        {
-            return true;
-        }
-        else
-            return false;
     }
 
     public void EndDialogue()
@@ -191,12 +175,19 @@ public class DialogueManager : MonoBehaviour
         dialogues = null;
         isNext = false;
         SettingUI(false);
-        StopAllCoroutines();
+
+        if (typewriterCo != null)
+        {
+            StopCoroutine(typewriterCo);
+            typewriterCo = null;
+        }
+
         ShowDialogueImg("stop", false);
 
-        reporter.Report();
-
-       
+        if (reporter != null)
+        {
+            reporter.Report();
+            reporter = null;
+        }
     }
-
 }
