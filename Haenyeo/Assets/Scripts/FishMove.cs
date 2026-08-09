@@ -12,9 +12,9 @@ public class FishMove : Fish
 
     SpriteRenderer render;
 
-    public float sinSpeed = 2.0f; // ÀÌµ¿ ¼Óµµ
-    public float frequency = 1.0f; // sin ÇÔ¼ö ÁÖ±â
-    public float amplitude = 1.0f; // sin ÇÔ¼ö ÁøÆø
+    public float sinSpeed = 2.0f; // ï¿½Ìµï¿½ ï¿½Óµï¿½
+    public float frequency = 1.0f; // sin ï¿½Ô¼ï¿½ ï¿½Ö±ï¿½
+    public float amplitude = 1.0f; // sin ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½
     private Vector3 startPos;
 
     bool move = true;
@@ -46,7 +46,7 @@ public class FishMove : Fish
         Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
         if (pos.x < 0)
         {
-            rigid.velocity = Vector2.zero;
+            rigid.linearVelocity = Vector2.zero;
             render.flipX = false;
             if (sinSpeed < 0)
                 sinSpeed *= -1f;
@@ -54,7 +54,7 @@ public class FishMove : Fish
         }
         if (pos.x > 1)
         {
-            rigid.velocity = Vector2.zero;
+            rigid.linearVelocity = Vector2.zero;
             render.flipX = true;
             sinSpeed *= -1f;
         }
@@ -103,7 +103,7 @@ public class FishMove : Fish
         }
     
         yield return new WaitForSeconds(reverseMoveSpeed);
-        rigid.velocity = Vector2.zero;
+        rigid.linearVelocity = Vector2.zero;
         startPos = transform.position;
         move = true;
         test();

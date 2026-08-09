@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NoodleSoupClams
   m_EditorClassIdentifier: 
   cookingName: Noodle Soup with Clams
-  cookingImage: {fileID: 21300000, guid: fdc3ecde5b226d948941c3a5a937d9b7, type: 3}
+  cookingImage: {fileID: 21300000, guid: 73a34c96659915d448fd849ae067a777, type: 3}
   price: 0
   needfood:
   - food: {fileID: 11400000, guid: 3bf83e7823a74fa46b48e41b03b69edb, type: 2}

@@ -15,6 +15,10 @@ TagManager:
   - Seo
   - SeafoodIcon
   - InactiveObject
+  - Jaewon
+  - Dayeong
+  - Minseo
+  - wall
   layers:
   - Default
   - TransparentFX

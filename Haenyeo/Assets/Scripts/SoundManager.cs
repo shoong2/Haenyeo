@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class Sound
@@ -21,9 +21,12 @@ public class SoundManager : MonoBehaviour
             instance = this;
         else
             Destroy(this.gameObject);
+
     }
 
     #endregion singleton
+
+
 
     public AudioSource[] audioSourceEffects; //효과음
     public AudioSource audioSourceBgm; // 배경음
@@ -36,8 +39,23 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         playSoundName = new string[audioSourceEffects.Length];
+
+        for (int i = 0; i < bgmSounds.Length; i++)
+        {
+            if (SceneManager.GetActiveScene().name == bgmSounds[i].name)
+            {
+                audioSourceBgm.clip = bgmSounds[i].clip;
+                audioSourceBgm.Play();
+                return;
+            }
+        }
+        
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
     public void PlaySE(string _name)  //노래 재생
     {
         for (int i = 0; i < effectSounds.Length; i++)
@@ -82,4 +100,27 @@ public class SoundManager : MonoBehaviour
         Debug.Log("재생 중인" + _name + "사운드가 없습니다");
     }
    
+    public void UIClick()
+    {
+        PlaySE("UIClick");
+    }
+
+    public void Confirm()
+    {
+        PlaySE("Confirm");
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Change Map");
+        for (int i = 0; i < bgmSounds.Length; i++)
+        {
+            if (scene.name == bgmSounds[i].name)
+            {
+                audioSourceBgm.clip = bgmSounds[i].clip;
+                audioSourceBgm.Play();
+                return;
+            }
+        }
+    }
 }

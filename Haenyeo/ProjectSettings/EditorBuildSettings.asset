@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MiniGame.unity
     guid: 09b7f960adfdfdb4ea0d6cd70d6d0978
+  - enabled: 1
+    path: Assets/Scenes/UnderSea_2.unity
+    guid: 63fdbf2d1dbfaa84fbc5dceff15e6265
   m_configObjects: {}

@@ -1653,14 +1653,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooking:
   - {fileID: 11400000, guid: 4f544c3b06e4d8748bb37352e0cf60ca, type: 2}
-  - {fileID: 11400000, guid: 4f544c3b06e4d8748bb37352e0cf60ca, type: 2}
-  - {fileID: 11400000, guid: 4f544c3b06e4d8748bb37352e0cf60ca, type: 2}
-  - {fileID: 11400000, guid: 4f544c3b06e4d8748bb37352e0cf60ca, type: 2}
+  - {fileID: 11400000, guid: 9d7740a287baff240bfe326bb76ded3f, type: 2}
+  - {fileID: 11400000, guid: 3f4b00ca559c54345872a2e711bbb787, type: 2}
+  - {fileID: 11400000, guid: ced181c9902088f4ea7bf6151e61345c, type: 2}
+  - {fileID: 11400000, guid: 1b81856ba03c6324e9f7c1baea66070e, type: 2}
+  - {fileID: 11400000, guid: 4b60fbcfa64809b4daa4d1b420089f23, type: 2}
+  - {fileID: 11400000, guid: e011cb2ac4cfa7e4aa50ee16a4308a17, type: 2}
+  - {fileID: 11400000, guid: 77047727e56f66c45bea5054f15a6e7d, type: 2}
   slotsParent: {fileID: 1613133731}
   recipeFrameParent: {fileID: 1413056402}
   framePrefab: {fileID: 364961306318791042, guid: 00f3811b82df23d439bf805640c2fcfe, type: 3}
   ingredients: {fileID: 1354990653}
   recipeWindow: {fileID: 1617007119}
+  fishWindow: {fileID: 2123838914}
 --- !u!1 &630035870
 GameObject:
   m_ObjectHideFlags: 0
@@ -3802,7 +3807,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1739517185}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a00bb6f546a7c464289f4115f83da8a0, type: 3}
   m_Name: 
@@ -3810,6 +3815,12 @@ MonoBehaviour:
   Start_cook: {fileID: 1739517189}
   MiniGame_ver_bar: {fileID: 630035870}
   MiniGame_bar: {fileID: 1731927556}
+  MiniGame_Gauge: {fileID: 0}
+  greatResultImage: {fileID: 0}
+  badResultImage: {fileID: 0}
+  timeoverResultImage: {fileID: 0}
+  timerManager: {fileID: 0}
+  speedMultiplier: 5
 --- !u!1 &1881403327
 GameObject:
   m_ObjectHideFlags: 0
@@ -3987,7 +3998,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2123838915
 RectTransform:
   m_ObjectHideFlags: 0

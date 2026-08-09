@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ConchPorridge
   m_EditorClassIdentifier: 
   cookingName: conch porridge
-  cookingImage: {fileID: 21300000, guid: 213c5fa69571ac54a8a11bcf603a99b4, type: 3}
+  cookingImage: {fileID: 21300000, guid: 6b08b92d5f2aebc4e9cadecc8dc425c7, type: 3}
   price: 0
   needfood:
   - food: {fileID: 11400000, guid: 1950e410bb864f343a0a69f592dd367b, type: 2}

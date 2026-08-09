@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
+  m_Name: 9_Q_Dialogue7
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
+  icon: {fileID: 0}
+  codeName: 555
+  displayName: 
+  description: 
+  taskGroups:
+  - tasks:
+    - {fileID: 11400000, guid: c0b2b3637154a764681098addcdaf8c6, type: 2}
+  - tasks:
+    - {fileID: 11400000, guid: 2280ce0de1d8638428fee2a5fd08fba4, type: 2}
+  people:
+  - Room_Player
+  - Won
+  - Seo
+  rewards: []
+  useAutoComplete: 1
+  isCancelable: 0
+  isSavable: 0
+  isNotifier: 0
+  isCount: 0
+  acceptionConditions:
+  - {fileID: 11400000, guid: 5c12a61dfda48144bb34a9312a12213d, type: 2}
+  cancelConditions: []

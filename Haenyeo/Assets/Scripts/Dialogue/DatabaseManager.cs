@@ -13,17 +13,6 @@ public class DatabaseManager : MonoBehaviour
     public static bool isFinish = false;
 
 
-    //퀘스트 테스트
-    [SerializeField] string csv_QuestFileName;
-
-    Dictionary<int, Quest_> questDic = new Dictionary<int, Quest_>();
-
-    public SaveNLoad storage;
-
-    //reward
-    [SerializeField] string csv_RewardFileName;
-
-    Dictionary<int, Reward_> rewardDic = new Dictionary<int, Reward_>();
 
 
     private void Awake()
@@ -39,20 +28,6 @@ public class DatabaseManager : MonoBehaviour
             }
             isFinish = true;
 
-            QuestParser QParser = GetComponent<QuestParser>();
-            Quest_[] quests = QParser.Parse(csv_QuestFileName);
-            for(int j=0; j<quests.Length; j++)
-            {
-                questDic.Add(int.Parse(quests[j].questIndex), quests[j]);
-
-            }
-
-            RewardParser RParser = GetComponent<RewardParser>();
-            Reward_[] rewards = RParser.Parse(csv_RewardFileName);
-            for(int q=0; q<rewards.Length; q++)
-            {
-                rewardDic.Add(q + 1, rewards[q]);
-            }
         }
     }
 
@@ -75,21 +50,5 @@ public class DatabaseManager : MonoBehaviour
         return dialogueList.ToArray();
     }
 
-    public Quest_[] GetQuest(int questCount)
-    {
-        List<Quest_> questList = new List<Quest_>();
-        if (questDic.ContainsKey(questCount))
-            questList.Add(questDic[questCount]);
-
-
-        return questList.ToArray();
-    }
-
-    public Reward_[] GetReward(int index)
-    {
-        List<Reward_> rewardList = new List<Reward_>();
-        rewardList.Add(rewardDic[index + 1]);
-        return rewardList.ToArray();
-    }
 
 }

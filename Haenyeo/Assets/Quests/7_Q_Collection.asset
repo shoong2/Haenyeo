@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
+  m_Name: 7_Q_Collection
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: a4015bb9c43591c4cbdb3f8d0f2a0c60, type: 2}
+  icon: {fileID: 0}
+  codeName: 444
+  displayName: "\uC7A0\uC218 \uC2E4\uB825\uC744 \uC785\uC99D\uD558\uC790(1)"
+  description: 
+  taskGroups:
+  - tasks:
+    - {fileID: 11400000, guid: ca9c9320eac3b2e4492cb394fb7a1a94, type: 2}
+  - tasks:
+    - {fileID: 11400000, guid: d3804c1106c240d40b10df64aa267567, type: 2}
+    - {fileID: 11400000, guid: 65b28ce2073667d41ab9fb549ad7db41, type: 2}
+    - {fileID: 11400000, guid: bd3a5ce323a0f32439772e1c8adb6941, type: 2}
+  people:
+  - Room_Player
+  - Won
+  - Seo
+  - Yoon
+  rewards: []
+  useAutoComplete: 1
+  isCancelable: 0
+  isSavable: 0
+  isNotifier: 1
+  isCount: 0
+  acceptionConditions:
+  - {fileID: 11400000, guid: 98208f705966a3f4db3c3ddd8cf798ee, type: 2}
+  cancelConditions: []

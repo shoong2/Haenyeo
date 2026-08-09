@@ -13,6 +13,7 @@ public class UnderSeaGameManager : MonoBehaviour
     public TMP_Text distaceText;
     public float distance;
     public float num; //오차 줄이기 숫자
+    float distanceNum;
 
     SpriteRenderer render;
     Camera camera;
@@ -37,7 +38,8 @@ public class UnderSeaGameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        distance = 0;
+        distanceNum = distance;
+        //distance = 0;
         currentHp = maxHp;
         camera = Camera.main;
         render = player.GetComponent<SpriteRenderer>();
@@ -50,12 +52,12 @@ public class UnderSeaGameManager : MonoBehaviour
     {
         //Debug.Log(player.transform.position.y - playerStartPos);
         distance = -(player.transform.position.y - playerStartPos)/9;
-        distaceText.text = distance.ToString("F1")+"M";
+        distaceText.text =(distanceNum+ distance).ToString("F1")+"M";
         
         if(storage && storage.saveData.nowIndex==1 && distance>=3)
         {
             storage.saveData.nowIndex++;
-            QuestManager.completeQuest = true;
+            //QuestManager.completeQuest = true;
             Debug.Log("complete quest1");
         }    
 
@@ -113,5 +115,7 @@ public class UnderSeaGameManager : MonoBehaviour
         itemText.text = "<b>[" +item_.itemName + "]</b>" + "을\n채집했습니다!";
         itemImage.sprite = item_.itemImage;
     }
+
     
+
 }

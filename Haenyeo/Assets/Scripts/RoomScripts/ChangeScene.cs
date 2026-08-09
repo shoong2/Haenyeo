@@ -28,9 +28,14 @@ public class ChangeScene : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Room");
+        StartCoroutine(LateStart());
     }
 
+    IEnumerator LateStart()
+    {
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene("Room");
+    }
     public void GoMiniGame()
     {
         SceneManager.LoadScene("MiniGame");
