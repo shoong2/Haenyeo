@@ -14,7 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   quests:
   - {fileID: 11400000, guid: 4a87426b9f83f594fb7fd517f820cf83, type: 2}
+  - {fileID: 11400000, guid: 3dbae2b9140cee148a09bac8381eaeb3, type: 2}
   - {fileID: 11400000, guid: a22471550cbece5418e0d3f36cbe683a, type: 2}
+  - {fileID: 11400000, guid: 4b022b8f9b2c935468f4651658d3448d, type: 2}
   - {fileID: 11400000, guid: 68701c37bf1dbbd48bfb0bd451bdf45d, type: 2}
-  - {fileID: 11400000, guid: 2d4498c6a7cd3d6419929abf5cc53149, type: 2}
-  - {fileID: 11400000, guid: 4f9ce7a99c08ab6478798e4305c395b6, type: 2}
+  - {fileID: 11400000, guid: 00abf8d805e3f2f4694b66ba10216680, type: 2}
+  - {fileID: 11400000, guid: ddd458980dd78a84f9ccc350c5fc22d6, type: 2}
+  - {fileID: 11400000, guid: 5cad23be0eec70c45b403c1103663f62, type: 2}
+  - {fileID: 11400000, guid: 8dc58130c3abdfa43ad883c0134bf059, type: 2}
+  - {fileID: 11400000, guid: b09a374fd481960468f106f3480193fe, type: 2}
+  - {fileID: 11400000, guid: b7d483b1e56a06245a085c14b49a3969, type: 2}
+  - {fileID: 11400000, guid: f595b15b8fc871740bce02cd8dc55619, type: 2}

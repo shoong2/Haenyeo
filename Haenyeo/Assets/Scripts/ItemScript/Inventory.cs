@@ -4,30 +4,33 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    //½½·Ô ºÎ¸ð
-    [SerializeField]
-    GameObject go_SlotsParent;
+    public static Inventory Instance { get; private set; }
 
-    //½½·Ôµé
-    Slot[] slots;
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½
+    //[SerializeField] GameObject go_SlotsParent;
 
-    public Slot[] GetSlots() { return slots; }
+    [SerializeField] GameObject go_AllSlotsParent;
+    [SerializeField] GameObject go_ClothesSlotsParent;
+    [SerializeField] GameObject go_EquipmentSlotsParent;
+
+    //ï¿½ï¿½ï¿½Ôµï¿½
+    //Slot[] slots;
+    Slot[] allSlots;
+    Slot[] clothesSlots;
+    Slot[] equipmentSlots;
+
+    public Slot[] GetSlots() { return allSlots; }
 
     [SerializeField] Item[] items;
 
-    public void LoadToInven(int _arrayNum, string _itemName, int _itemNum)
-    {
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (items[i].itemName == _itemName)
-                slots[_arrayNum].AddItem(items[i], _itemNum);
-        }
-    }
-
     private void Awake()
     {
-        slots = go_SlotsParent.GetComponentsInChildren<Slot>();
+        Instance = this;
+        allSlots = go_AllSlotsParent.GetComponentsInChildren<Slot>(true);
+        clothesSlots = go_ClothesSlotsParent.GetComponentsInChildren<Slot>(true);
+        equipmentSlots = go_EquipmentSlotsParent.GetComponentsInChildren<Slot>(true);
     }
+
 
     private void Start()
     {
@@ -36,31 +39,71 @@ public class Inventory : MonoBehaviour
     }
 
 
-     
-    public void AcquireItem(Item _item, bool quest,int _count =1)
+
+    public void AcquireItem(Item _item, bool quest, int _count = 1)
     {
-        if (Item.ItemType.Tool != _item.itemType)
+        AddToArray(allSlots, _item, _count);
+
+        Slot[] categorySlots = GetSlotsByType(_item.itemType);
+        if (categorySlots != null)
+            AddToArray(categorySlots, _item, _count);
+
+    }
+
+    void AddToArray(Slot[] targetSlots, Item _item, int _count)
+    {
+        if (Item.ItemType.Equipment != _item.itemType)
         {
-           Debug.Log(slots.Length);
-            for (int i = 0; i < slots.Length; i++)
+            for (int i = 0; i < targetSlots.Length; i++)
             {
-                if (slots[i].item != null)
+                if (targetSlots[i].item != null && targetSlots[i].item.itemName == _item.itemName)
                 {
-                    if (slots[i].item.itemName == _item.itemName)
-                    {
-                        slots[i].SetSlotCount(_count);
-                        return;
-                    }
+                    targetSlots[i].SetSlotCount(_count);
+                    return;
                 }
             }
         }
-
-        for (int i = 0; i < slots.Length; i++)
+        for (int i = 0; i < targetSlots.Length; i++)
         {
-            if (slots[i].item == null)
+            if (targetSlots[i].item == null)
             {
-                slots[i].AddItem(_item, _count);
+                targetSlots[i].AddItem(_item, _count);
                 return;
+            }
+        }
+    }
+
+    Slot[] GetSlotsByType(Item.ItemType type)
+    {
+        switch (type)
+        {
+            case Item.ItemType.Cloth: return clothesSlots;
+            case Item.ItemType.Equipment: return equipmentSlots;
+            default: return null; // Tool ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½×°ï¿½ï¿½ï¿½ ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½
+        }
+    }
+
+
+    // ===== ï¿½ï¿½ ï¿½ï¿½È¯ =====
+    public void ShowCategory(Item.ItemType? category)
+    {
+        go_AllSlotsParent.SetActive(category == null);
+        go_ClothesSlotsParent.SetActive(category == Item.ItemType.Cloth);
+        go_EquipmentSlotsParent.SetActive(category == Item.ItemType.Equipment);
+    }
+
+    // ===== ï¿½ï¿½ï¿½ï¿½/ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£È¯ ï¿½ï¿½ï¿½ï¿½) =====
+    public void LoadToInven(int _arrayNum, string _itemName, int _itemNum)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i].itemName == _itemName)
+            {
+                allSlots[_arrayNum].AddItem(items[i], _itemNum);
+
+                Slot[] categorySlots = GetSlotsByType(items[i].itemType);
+                if (categorySlots != null)
+                    AddToArray(categorySlots, items[i], _itemNum);
             }
         }
     }

@@ -26,12 +26,12 @@ MonoBehaviour:
   - Room_Player
   - Won
   - Yeong
-  rewards:
-  - {fileID: 11400000, guid: 764589fa53f01624ca9de176546de5e4, type: 2}
+  rewards: []
   useAutoComplete: 1
   isCancelable: 0
   isSavable: 0
-  isNotifier: 1
+  isNotifier: 0
   isCount: 0
-  acceptionConditions: []
+  acceptionConditions:
+  - {fileID: 11400000, guid: b5012e2829cbb634ea4d24a2c374dcda, type: 2}
   cancelConditions: []

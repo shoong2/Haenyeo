@@ -34,7 +34,7 @@ public class Slot : MonoBehaviour
         itemCount = _count;
         itemImage.sprite = item.itemImage;
 
-        if (item.itemType != Item.ItemType.Tool)
+        if (item.itemType == Item.ItemType.item)
         {
             text_Count.text = itemCount.ToString();
             //text_Count.text = "0";
@@ -44,8 +44,10 @@ public class Slot : MonoBehaviour
         }
         else
         {
-            countImage.SetActive(false);
-            text_Count.text = "0";
+            if(countImage!=null)
+                countImage.SetActive(false);
+            //text_Count.text = "0";
+            text_Count.gameObject.SetActive(false);
         }
         SetColor(1);
     }

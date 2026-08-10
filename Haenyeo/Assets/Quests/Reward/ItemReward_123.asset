@@ -15,7 +15,7 @@ MonoBehaviour:
   rewardType: 1
   icon: {fileID: 0}
   description: 
-  quantity: 0
+  quantity: 1
   item:
   - {fileID: 11400000, guid: b535a9f07e57f834a96b24e559cd3fdb, type: 2}
   - {fileID: 11400000, guid: f7d4a724314665843985ace212b08a88, type: 2}
