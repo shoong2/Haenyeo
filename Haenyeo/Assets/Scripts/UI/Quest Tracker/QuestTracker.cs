@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 // 퀘스트 하나의 진행 상황을 화면에 띄운다. 단계가 넘어가면 지난 목표에 취소선을 긋는다.
 public class QuestTracker : MonoBehaviour
@@ -8,6 +9,9 @@ public class QuestTracker : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI questTitleText;
 
+    // 필드 이름을 바꾸면 Unity가 옛 직렬화 데이터를 못 찾아 참조가 빈다.
+    // FormerlySerializedAs 로 옛 이름도 읽게 해준다.
+    [FormerlySerializedAs("taskDescriptorPrefab")]
     [SerializeField]
     ObjectiveDescriptor objectiveDescriptorPrefab;
 

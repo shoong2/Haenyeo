@@ -6529,7 +6529,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6094592677058329837}
-  - component: {fileID: 5138967448432940230}
   m_Layer: 0
   m_Name: PlayerprefsUtility
   m_TagString: Untagged
@@ -6552,18 +6551,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7276246039932189603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5138967448432940230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5159366398788525507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01fcd13d4dcf62e4880d76e392510b8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5316101544517402716
 GameObject:
   m_ObjectHideFlags: 0
@@ -8310,7 +8297,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questTrackerPrefab: {fileID: 1805387339798994762, guid: d8dd61b676ff5a1428c78bbd0dd5bbcf, type: 3}
-  categoryColors: []
 --- !u!1 &6759095937018441112
 GameObject:
   m_ObjectHideFlags: 0

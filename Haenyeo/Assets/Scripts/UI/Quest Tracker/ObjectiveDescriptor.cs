@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 // 퀘스트 트래커의 목표 한 줄. "전복 2/3" 처럼 진행도를 붙여 보여준다.
 public class ObjectiveDescriptor : MonoBehaviour
@@ -10,12 +11,15 @@ public class ObjectiveDescriptor : MonoBehaviour
     [SerializeField]
     Color normalColor;
 
+    [FormerlySerializedAs("taskCompletionColor")]
     [SerializeField]
     Color completionColor;
 
+    [FormerlySerializedAs("taskSuccessCountColor")]
     [SerializeField]
     Color countColor;
 
+    [FormerlySerializedAs("strikeThrounghColor")]
     [SerializeField]
     Color strikeThroughColor;
 
