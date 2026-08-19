@@ -54,7 +54,7 @@ public class ObjectiveDescriptor : MonoBehaviour
     string BuildText(QuestObjective objective, string textColorCode, string countColorCode)
     {
         if (!ShowsCount(objective.Type))
-            return $"<color=#{textColorCode}>· {objective.Description}</color>";
+            return $"<color=#{textColorCode}>{objective.Description}</color>";
 
         return $"<color=#{textColorCode}>· {objective.Description} " +
                $"<color=#{countColorCode}>{objective.CurrentCount}</color>/{objective.NeedCount}</color>";

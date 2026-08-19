@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questId: 5_Q_Collection
   displayName: "\uAE30\uBCF8 \uC7AC\uB8CC \uC218\uC9D1\uD558\uAE30"
+  sheetId: q_tuto_5
   steps:
   - objectives:
     - type: 0

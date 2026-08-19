@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 7_Q_Collection
   m_EditorClassIdentifier: 
   questId: 7_Q_Collection
-  displayName: "\uC7A0\uC218 \uC2E4\uB825\uC744 \uC785\uC99D\uD558\uC790(1)"
+  displayName: "\uC7A0\uC218 \uC2E4\uB825\uC744 \uC785\uC99D\uD558\uC790 (1)"
+  sheetId: q_tuto_7
   steps:
   - objectives:
     - type: 0

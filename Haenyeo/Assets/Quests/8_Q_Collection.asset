@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: 8_Q_Collection
   m_EditorClassIdentifier: 
   questId: 8_Q_Collection
-  displayName: "\uC694\uB9AC\uC5D0 \uD544\uC694\uD55C \uC7AC\uB8CC\uB97C \uC218\uC9D1\uD558\uC790 (1)"
+  displayName: "\uC694\uB9AC\uC5D0 \uD544\uC694\uD55C \uC7AC\uB8CC\uB97C \uC218\uC9D1\uD558\uC790
+    (1)"
+  sheetId: q_tuto_8
   steps:
   - objectives:
     - type: 0
@@ -34,7 +36,7 @@ MonoBehaviour:
       description: "\uC0B4\uC624\uC9D5\uC5B4"
       targets:
       - Squid
-      needCount: 1
+      needCount: 3
       acceptReportsWhenComplete: 0
     rewards: []
   rewards: []

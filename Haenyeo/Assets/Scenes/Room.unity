@@ -1718,9 +1718,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 1515575122}
     m_Modifications:
     - target: {fileID: 1052953793467943836, guid: efc7ef81a54a1694585528f99b4e2460, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 11400000, guid: 0b51b368f51bd5c4e84a4eb1286c1d7a, type: 2}
+      propertyPath: targetId
+      value: Jaewon
+      objectReference: {fileID: 0}
     - target: {fileID: 1068224122187680902, guid: efc7ef81a54a1694585528f99b4e2460, type: 3}
       propertyPath: m_Name
       value: QuestMarker
@@ -2795,9 +2795,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 362355391862585053}
     m_Modifications:
     - target: {fileID: 1052953793467943836, guid: efc7ef81a54a1694585528f99b4e2460, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 11400000, guid: 3661fed199df050479ae52f754e7c843, type: 2}
+      propertyPath: targetId
+      value: Minseo
+      objectReference: {fileID: 0}
     - target: {fileID: 1068224122187680902, guid: efc7ef81a54a1694585528f99b4e2460, type: 3}
       propertyPath: m_Name
       value: QuestMarker

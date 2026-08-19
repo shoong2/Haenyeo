@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: 10_Q_SubQuest
   m_EditorClassIdentifier: 
   questId: 10_Q_SubQuest
-  displayName: "\uC694\uB9AC\uC5D0 \uD544\uC694\uD55C \uC7AC\uB8CC\uB97C \uC218\uC9D1\uD558\uC790 (2)"
+  displayName: "\uC694\uB9AC\uC5D0 \uD544\uC694\uD55C \uC7AC\uB8CC\uB97C \uC218\uC9D1\uD558\uC790
+    (2)"
+  sheetId: q_tuto_9
   steps:
   - objectives:
     - type: 0
@@ -28,13 +30,13 @@ MonoBehaviour:
       description: "\uC804\uBCF5"
       targets:
       - Abalone
-      needCount: 10
+      needCount: 5
       acceptReportsWhenComplete: 0
     - type: 1
       description: "\uB300\uAC8C"
       targets:
       - Crab
-      needCount: 5
+      needCount: 3
       acceptReportsWhenComplete: 0
     - type: 1
       description: Oyster
@@ -46,7 +48,7 @@ MonoBehaviour:
       description: "\uAC00\uB2E4\uB791\uC5B4"
       targets:
       - Squid
-      needCount: 5
+      needCount: 3
       acceptReportsWhenComplete: 0
     rewards: []
   rewards: []

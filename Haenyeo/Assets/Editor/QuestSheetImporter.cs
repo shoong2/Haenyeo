@@ -14,12 +14,12 @@ public class QuestSheetImporter : EditorWindow
 {
     const string DefaultCsvPath = "Assets/Resources/quest.csv";
 
-    // 시트 컬럼 (0-based). 헤더는 3번째 줄(index 2)에 있다.
-    const int ColSheetId    = 3;
-    const int ColDisplayName= 5;
-    const int ColItemName   = 7;
-    const int ColItemCount  = 8;
-    const int HeaderRow     = 2;
+    // 컬럼 위치를 하드코딩하지 않는다. export 방식(gviz / 파일 내보내기)에 따라
+    // 상단 안내 줄 개수가 달라지므로 헤더 줄을 이름으로 찾아낸다.
+    static readonly string[] HeaderSheetId    = { "ID" };
+    static readonly string[] HeaderDisplayName= { "퀘스트 이름" };
+    static readonly string[] HeaderItemName   = { "해산물 이름" };
+    static readonly string[] HeaderItemCount  = { "갯수", "개수" };
 
     TextAsset csvAsset;
     Vector2 scroll;
@@ -66,13 +66,54 @@ public class QuestSheetImporter : EditorWindow
         public readonly List<KeyValuePair<string, int>> collects = new List<KeyValuePair<string, int>>();
     }
 
-    List<SheetQuest> ParseSheet(string csv)
+    // "ID" 와 "해산물 이름" 이 같이 있는 줄을 헤더로 본다.
+    static int FindHeaderRow(List<List<string>> rows)
     {
+        for (int r = 0; r < rows.Count && r < 20; r++)
+        {
+            var cells = rows[r].Select(x => x.Trim()).ToList();
+            if (cells.Contains("ID") && cells.Contains("해산물 이름"))
+                return r;
+        }
+        return -1;
+    }
+
+    static int FindColumn(IList<string> header, string[] candidates)
+    {
+        for (int i = 0; i < header.Count; i++)
+            if (candidates.Contains(header[i].Trim()))
+                return i;
+        return -1;
+    }
+
+    List<SheetQuest> ParseSheet(string csv, out string error)
+    {
+        error = null;
         var rows = CsvUtility.Parse(csv);
         var result = new List<SheetQuest>();
-        SheetQuest current = null;
 
-        for (int r = HeaderRow + 1; r < rows.Count; r++)
+        int headerRow = FindHeaderRow(rows);
+        if (headerRow < 0)
+        {
+            error = "헤더 줄을 찾지 못했습니다. \"ID\" 와 \"해산물 이름\" 컬럼이 있는 csv인지 확인하세요.";
+            return result;
+        }
+
+        var header = rows[headerRow];
+        int ColSheetId     = FindColumn(header, HeaderSheetId);
+        int ColDisplayName = FindColumn(header, HeaderDisplayName);
+        int ColItemName    = FindColumn(header, HeaderItemName);
+        int ColItemCount   = FindColumn(header, HeaderItemCount);
+
+        if (ColSheetId < 0 || ColDisplayName < 0 || ColItemName < 0 || ColItemCount < 0)
+        {
+            error = $"필요한 컬럼을 못 찾았습니다 (ID={ColSheetId}, 퀘스트 이름={ColDisplayName}, " +
+                    $"해산물 이름={ColItemName}, 갯수={ColItemCount})";
+            return result;
+        }
+
+        SheetQuest current = null;
+        for (int r = headerRow + 1; r < rows.Count; r++)
         {
             var row = rows[r];
             string id = Cell(row, ColSheetId);
@@ -106,7 +147,9 @@ public class QuestSheetImporter : EditorWindow
     // ------------------------------------------------------------------ 본체
     string Run(bool dryRun, bool autoLink)
     {
-        var sheet = ParseSheet(csvAsset.text);
+        var sheet = ParseSheet(csvAsset.text, out string parseError);
+        if (parseError != null)
+            return parseError;
         var quests = AssetDatabase.FindAssets("t:Quest")
             .Select(AssetDatabase.GUIDToAssetPath)
             .Select(AssetDatabase.LoadAssetAtPath<Quest>)
