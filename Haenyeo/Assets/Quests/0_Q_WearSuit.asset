@@ -11,27 +11,28 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
   m_Name: 0_Q_WearSuit
-  m_EditorClassIdentifier: Assembly-CSharp::Quest
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  icon: {fileID: 0}
-  codeName: 12
+  m_EditorClassIdentifier: 
+  questId: 0_Q_WearSuit
   displayName: "\uD574\uB140\uBCF5 \uCC29\uC6A9\uD558\uAE30"
-  description: "\uC637\uC7A5\uC744 \uD074\uB9AD\uD558\uC5EC \uC778\uBCA4\uD1A0\uB9AC\uC5D0\uC11C\n\uACE0\uBB34\uC637
-    \uC218\uACBD \uC624\uB9AC\uBC1C\uC744 \uCC29\uC6A9\uD558\uC790"
-  taskGroups:
-  - tasks:
-    - {fileID: 11400000, guid: 271c541c20dd329499a93d153a292350, type: 2}
+  steps:
+  - objectives:
+    - type: 0
+      description: "\uC7AC\uC6D0\uACFC \uB300\uD654\uD558\uAE30"
+      targets:
+      - Jaewon
+      needCount: 1
+      acceptReportsWhenComplete: 0
     rewards:
     - {fileID: 11400000, guid: 764589fa53f01624ca9de176546de5e4, type: 2}
-  - tasks:
-    - {fileID: 11400000, guid: 03621293b849e9b4b942da67242af1d8, type: 2}
+  - objectives:
+    - type: 3
+      description: "\uC637\uC785\uAE30"
+      targets:
+      - WearFullSuit
+      needCount: 1
+      acceptReportsWhenComplete: 0
     rewards: []
-  people: []
   rewards: []
-  useAutoComplete: 1
-  isCancelable: 0
-  isSavable: 0
-  isNotifier: 1
-  isCount: 0
-  acceptionConditions: []
-  cancelConditions: []
+  prerequisite: {fileID: 0}
+  timeLimitSeconds: 0
+  showNotification: 1

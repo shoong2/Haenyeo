@@ -8,9 +8,11 @@ public class OutfitQuestReporter : MonoBehaviour
 {
     [Header("Report")]
     [SerializeField]
-    Category category;      // Task의 category와 같아야 함
+    ObjectiveType type = ObjectiveType.Wear;
+
+    [Tooltip("QuestObjective의 targets에 들어있어야 한다")]
     [SerializeField]
-    TaskTarget target;      // Task의 targets에 들어있어야 함 (StringTarget 등)
+    string targetId;
 
     [Header("완료로 볼 착용 상태")]
     [SerializeField]
@@ -42,20 +44,20 @@ public class OutfitQuestReporter : MonoBehaviour
         if (!IsWearingAll())
             return;
 
-        QuestSystem.Instance.ReceiveReport(category, target, 1);
+        QuestSystem.Instance.ReceiveReport(type, targetId, 1);
     }
 
     // 지금 진행 중인 단계에서 이 타겟을 기다리는 퀘스트가 하나라도 있는지.
     // Quest.ContainsTarget은 아직 오지 않은 뒷 단계까지 훑기 때문에 현재 단계만 본다.
     bool IsQuestWatching()
     {
-        if (category == null || target == null)
+        if (string.IsNullOrEmpty(targetId))
             return false;
 
         foreach (var quest in QuestSystem.Instance.ActiveQuests)
         {
-            var group = quest.CurrentTaskGroup;
-            if (group != null && group.ContainsTarget(target))
+            var step = quest.CurrentStep;
+            if (step != null && step.ContainsTarget(targetId))
                 return true;
         }
         return false;

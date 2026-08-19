@@ -12,25 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
   m_Name: 2_Q_Dialogue1
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  icon: {fileID: 0}
-  codeName: 2222
-  displayName: 
-  description: 321
-  taskGroups:
-  - tasks:
-    - {fileID: 11400000, guid: 1fe5a56b7e843c1448852ee982bc367e, type: 2}
-  people:
-  - Room_Player
-  - Won
-  - Yeong
+  questId: 2_Q_Dialogue1
+  displayName: ""
+  steps:
+  - objectives:
+    - type: 0
+      description: "\uC7AC\uC6D0\uACFC \uB300\uD654\uD558\uAE30_"
+      targets:
+      - Jaewon
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
   rewards:
   - {fileID: 11400000, guid: 6df72cf9e35cf3148ba9a63a2e780960, type: 2}
-  useAutoComplete: 1
-  isCancelable: 0
-  isSavable: 0
-  isNotifier: 0
-  isCount: 0
-  acceptionConditions:
-  - {fileID: 11400000, guid: 65a2e22a261d6074284530dd1d32c37a, type: 2}
-  cancelConditions: []
+  prerequisite: {fileID: 11400000, guid: 4a87426b9f83f594fb7fd517f820cf83, type: 2}
+  timeLimitSeconds: 0
+  showNotification: 0

@@ -168,11 +168,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  target: {fileID: 11400000, guid: 3661fed199df050479ae52f754e7c843, type: 2}
-  successCount: 1
+  type: 0
+  targetId: Minseo
+  count: 1
   colliderTags: []
-  sceneName: 
 --- !u!1001 &1588350738263037317
 PrefabInstance:
   m_ObjectHideFlags: 0

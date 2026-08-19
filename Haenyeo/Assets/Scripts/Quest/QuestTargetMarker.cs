@@ -1,127 +1,99 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.SceneManagement;
 
+// 이 타겟을 목표로 하는 퀘스트가 진행 중일 때만 오브젝트를 켠다. (퀘스트 마커)
 public class QuestTargetMarker : MonoBehaviour
 {
-    //TryAddTargetQuest �Լ����� ����Ʈ�� �ִ� ��� Ÿ���� ��ȸ�� �� ��Ȱ��ȭ ���ִ� ����� ��ȸ�� �ż�
-    //�и����Ѽ� �� ��� �����ϱ�
-
-
+    [Tooltip("QuestObjective의 targets에 들어있는 문자열")]
     [SerializeField]
-    TaskTarget target;
-    [SerializeField]
-    MarkerMaterialData[] markerMaterialDatas;
+    string targetId;
 
-    Dictionary<Quest, Task> targetTasksByQuest = new Dictionary<Quest, Task>();
-    //Transform cameraTransform;
-    //Renderer renderer;
+    readonly Dictionary<Quest, QuestObjective> targetObjectivesByQuest = new Dictionary<Quest, QuestObjective>();
 
-
-    private void Awake()
-    {
-        //cameraTransform = Camera.main.transform;
-       // renderer = GetComponent<Renderer>();
-    }
-
-    private void Start()
+    void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         gameObject.SetActive(false);
 
-        QuestSystem.Instance.onQuestRegistered += TryAddTargetQuest;
-        foreach (var quest in QuestSystem.Instance.ActiveQuests)
+        var questSystem = QuestSystem.Instance;
+        questSystem.onQuestRegistered += TryAddTargetQuest;
+        questSystem.onQuestUnregistered += RemoveTargetQuest;
+
+        foreach (var quest in questSystem.ActiveQuests)
             TryAddTargetQuest(quest);
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        ClearEvent();
-    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode) => ClearEvents();
 
+    void OnDestroy() => ClearEvents();
 
-    private void OnDestroy()
-    {
-        ClearEvent();
-    }
-
-    void ClearEvent()
+    void ClearEvents()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
         // 게임 종료 중에는 Instance가 null을 돌려주므로 확인하고 접근한다
         var questSystem = QuestSystem.Instance;
         if (questSystem != null)
-            questSystem.onQuestRegistered -= TryAddTargetQuest;
-
-        foreach ((Quest quest, Task task) in targetTasksByQuest)
         {
-            quest.onNewTaskGroup -= UpdateTargetTask;
-            quest.onCompleted -= RemoveTargetQuest;
-            task.onStateChanged -= UpdateRunningTargetTaskCount;
+            questSystem.onQuestRegistered -= TryAddTargetQuest;
+            questSystem.onQuestUnregistered -= RemoveTargetQuest;
         }
-    }
 
+        foreach (var pair in targetObjectivesByQuest)
+        {
+            pair.Key.onNewStep -= UpdateTargetObjective;
+            pair.Key.onCompleted -= RemoveTargetQuest;
+            pair.Value.onStateChanged -= OnObjectiveStateChanged;
+        }
+        targetObjectivesByQuest.Clear();
+    }
 
     void TryAddTargetQuest(Quest quest)
     {
-        if(target !=null && quest.ContainsTarget(target))
-        {
-            quest.onNewTaskGroup += UpdateTargetTask;
-            quest.onCompleted += RemoveTargetQuest;
+        if (string.IsNullOrEmpty(targetId) || !quest.ContainsTarget(targetId))
+            return;
 
-            UpdateTargetTask(quest, quest.CurrentTaskGroup);
-        }
+        quest.onNewStep += UpdateTargetObjective;
+        quest.onCompleted += RemoveTargetQuest;
+
+        UpdateTargetObjective(quest, quest.CurrentStep);
     }
 
-    void UpdateTargetTask(Quest quest, TaskGroup currentTaskGroup, TaskGroup prevTaskGroup = null)
+    void UpdateTargetObjective(Quest quest, QuestStep currentStep, QuestStep prevStep = null)
     {
-        targetTasksByQuest.Remove(quest);
+        targetObjectivesByQuest.Remove(quest);
 
-        var task = currentTaskGroup.FindTaskByTarget(target);
-        if(task!=null)
+        var objective = currentStep.FindObjectiveByTarget(targetId);
+        if (objective == null)
         {
-            targetTasksByQuest[quest] = task;
-            task.onStateChanged += UpdateRunningTargetTaskCount;
-
             RefreshMarker();
+            return;
         }
+
+        targetObjectivesByQuest[quest] = objective;
+        objective.onStateChanged += OnObjectiveStateChanged;
+
+        RefreshMarker();
     }
 
     void RemoveTargetQuest(Quest quest)
     {
-        targetTasksByQuest.Remove(quest);
+        targetObjectivesByQuest.Remove(quest);
         RefreshMarker();
     }
 
-    void UpdateRunningTargetTaskCount(Task task, TaskState currentState, TaskState prevState = TaskState.Inactive)
-    {
-        //renderer.material = markerMaterialDatas.First(x => x.category == task.Category).markerMatrial;
-        RefreshMarker();
-    }
+    void OnObjectiveStateChanged(QuestObjective objective, ObjectiveState currentState, ObjectiveState prevState)
+        => RefreshMarker();
 
-    // 이벤트가 올 때마다 증감을 누적하면 값이 어긋난다.
-    // (초기 상태가 Running이 아니면 -1이 되고, Task.State는 값이 안 바뀌어도 매번 이벤트를 쏘기 때문에
-    //  Running -> Running 이 반복되면 계속 증가한다)
-    // 그래서 델타를 쌓지 않고 매번 실제 상태를 다시 센다.
+    // 이벤트가 올 때마다 증감을 누적하면 값이 어긋난다. 매번 실제 상태를 다시 센다.
     void RefreshMarker()
     {
         int runningCount = 0;
-        foreach (var pair in targetTasksByQuest)
-        {
-            if (pair.Value.State == TaskState.Running)
+        foreach (var pair in targetObjectivesByQuest)
+            if (pair.Value.State == ObjectiveState.Running)
                 runningCount++;
-        }
 
         gameObject.SetActive(runningCount > 0);
-    }
-
-    [System.Serializable]
-    struct MarkerMaterialData
-    {
-        public Category category;
-        public Material markerMatrial;
     }
 }

@@ -1,50 +1,35 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-[CreateAssetMenu(menuName ="Quest/QuestDatabase")]
+// 모든 퀘스트 에셋 목록. 시트 임포터가 questId로 퀘스트를 찾을 때 쓴다.
+[CreateAssetMenu(menuName = "Quest/QuestDatabase")]
 public class QuestDatabase : ScriptableObject
 {
     [SerializeField]
-    List<Quest> quests;
+    List<Quest> quests = new List<Quest>();
 
     public IReadOnlyList<Quest> Quests => quests;
 
-    public Quest FindQuestBy(string codeName) => quests.FirstOrDefault(x => x.CodeName == codeName);
+    public Quest FindQuestBy(string questId) => quests.FirstOrDefault(x => x != null && x.QuestId == questId);
 
 #if UNITY_EDITOR
-    [ContextMenu("FindQuests")]
-    void FindQuests()
+    [ContextMenu("프로젝트의 모든 Quest 찾기")]
+    public void FindQuests()
     {
-        FindQuestsBy<Quest>();
-    }
+        quests = AssetDatabase.FindAssets("t:Quest")
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<Quest>)
+            .Where(x => x != null)
+            .OrderBy(x => x.name)
+            .ToList();
 
-    [ContextMenu("FindAchievements")]
-    void FindAchievements()
-    {
-        FindQuestsBy<Achievement>();
-    }
-    void FindQuestsBy<T>() where T: Quest
-    {
-        quests = new List<Quest>();
-        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
-
-        foreach(var guid in guids)
-        {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            var quest = AssetDatabase.LoadAssetAtPath<T>(assetPath);
-
-            if (quest.GetType() == typeof(T))
-                quests.Add(quest);
-
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
-        }
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
     }
 #endif
 }

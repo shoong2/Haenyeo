@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93367b4078184bceb3673a68e22e1505, type: 3}
+  m_Name: BeachCastTable
+  m_EditorClassIdentifier: 
+  entries:
+  - questId: 11_Q_Collection
+    people:
+    - Room_Player
+    - Won
+    - Yeong
+  - questId: 1_Q_GoSea
+    people:
+    - Room_Player
+    - Won
+    - Yeong
+  - questId: 2_Q_Dialogue1
+    people:
+    - Room_Player
+    - Won
+    - Yeong
+  - questId: 3_Q_3M
+    people:
+    - Room_Player
+    - Won
+    - Yeong
+  - questId: 4_Q_Dialogue2
+    people:
+    - Room_Player
+    - Yeong
+    - Won
+  - questId: 5_Q_Collection
+    people:
+    - Room_Player
+    - Won
+    - Yeong
+  - questId: 6_Q_GoBed
+    people:
+    - Room_Player
+    - Won
+  - questId: 7_Q_Collection
+    people:
+    - Room_Player
+    - Won
+    - Seo
+    - Yoon
+  - questId: 8_Q_Collection
+    people:
+    - Room_Player
+    - Won
+    - Seo
+    - Yoon
+  - questId: 9_Q_Dialogue7
+    people:
+    - Room_Player
+    - Won
+    - Seo
+  positionsFor3:
+  - {x: -5.12, y: -1.11}
+  - {x: -1.15, y: -0.01}
+  - {x: 2.18, y: -1.07}
+  positionsFor4:
+  - {x: -5.87, y: -0.76}
+  - {x: -2.63, y: 0.89}
+  - {x: 0.07, y: -1.07}
+  - {x: 3.02, y: 1.19}
+  positionsForOther:
+  - {x: -7.64, y: -1.33}
+  - {x: -4.65, y: 0.89}
+  - {x: -1.92, y: -1.07}
+  - {x: 0.99, y: 1.19}
+  - {x: 3.91, y: -0.43}

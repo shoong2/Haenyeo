@@ -1,52 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-using UnityEngine.UI;
 
+// 진행 중인 퀘스트마다 트래커를 하나씩 만든다.
 public class QuestTrackerView : MonoBehaviour
 {
     [SerializeField]
     QuestTracker questTrackerPrefab;
 
-    [SerializeField]
-    CategoryColor[] categoryColors;
-
-  
-
-    private void Start()
+    void Start()
     {
-        QuestSystem.Instance.onQuestRegistered += CreateQuestTracker;
-        foreach (var quest in QuestSystem.Instance.ActiveQuests)
-        {
-            CreateQuestTracker(quest);
-        }
+        var questSystem = QuestSystem.Instance;
+        questSystem.onQuestRegistered += CreateQuestTracker;
 
+        foreach (var quest in questSystem.ActiveQuests)
+            CreateQuestTracker(quest);
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
-        if (QuestSystem.Instance)
-            QuestSystem.Instance.onQuestRegistered -= CreateQuestTracker;
+        var questSystem = QuestSystem.Instance;
+        if (questSystem != null)
+            questSystem.onQuestRegistered -= CreateQuestTracker;
     }
 
     void CreateQuestTracker(Quest quest)
-    {
-        Debug.Log("create ui");
-        var categoryColor = categoryColors.FirstOrDefault(x => x.category == quest.Category);
-        var color = categoryColor.category == null ? Color.white : Color.black;//categoryColor.color;
-
-        Debug.Log(categoryColor.category);
-        //foreach(var task in quest.CurrentTaskGroup.Tasks)
-        //    if(task.CodeName!="dialogue")
-        Instantiate(questTrackerPrefab, transform).Setup(quest, color);
-    }
-
-    [System.Serializable]
-    struct CategoryColor
-    {
-        public Category category;
-        public Color color;
-    }
+        => Instantiate(questTrackerPrefab, transform).Setup(quest);
 }
-

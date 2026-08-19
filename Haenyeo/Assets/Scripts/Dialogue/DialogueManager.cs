@@ -157,7 +157,7 @@ public class DialogueManager : MonoBehaviour
 
             foreach (var quest in QuestSystem.Instance.ActiveQuests)
             {
-                if (quest.CurrentTaskGroup.ContainsTarget(hit.collider.tag))
+                if (quest.CurrentStep.ContainsTarget(hit.collider.tag))
                 {
                     reporter = hit.collider.gameObject.GetComponent<QuestReporter>();
                     ShowDialogue(DatabaseManager.instance.GetDialogue(storage.saveData.nowIndex));
@@ -186,6 +186,11 @@ public class DialogueManager : MonoBehaviour
 
         if (reporter != null)
         {
+            // 대화 커서는 대화 시스템이 소유한다.
+            // 예전에는 Quest.ReceiveReport가 올려줬는데, 활성 퀘스트마다 한 번씩
+            // 호출돼서 퀘스트가 둘 이상이면 대사가 건너뛰어졌다.
+            storage.saveData.nowIndex++;
+
             reporter.Report();
             reporter = null;
         }

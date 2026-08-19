@@ -12,29 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
   m_Name: 7_Q_Collection
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: a4015bb9c43591c4cbdb3f8d0f2a0c60, type: 2}
-  icon: {fileID: 0}
-  codeName: 444
+  questId: 7_Q_Collection
   displayName: "\uC7A0\uC218 \uC2E4\uB825\uC744 \uC785\uC99D\uD558\uC790(1)"
-  description: 
-  taskGroups:
-  - tasks:
-    - {fileID: 11400000, guid: ca9c9320eac3b2e4492cb394fb7a1a94, type: 2}
-  - tasks:
-    - {fileID: 11400000, guid: d3804c1106c240d40b10df64aa267567, type: 2}
-    - {fileID: 11400000, guid: 65b28ce2073667d41ab9fb549ad7db41, type: 2}
-    - {fileID: 11400000, guid: bd3a5ce323a0f32439772e1c8adb6941, type: 2}
-  people:
-  - Room_Player
-  - Won
-  - Seo
-  - Yoon
+  steps:
+  - objectives:
+    - type: 0
+      description: "\uC7AC\uC6D0\uC774 \uB300\uD654"
+      targets:
+      - Jaewon
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
+  - objectives:
+    - type: 1
+      description: "\uC804\uBCF5"
+      targets:
+      - Abalone
+      needCount: 3
+      acceptReportsWhenComplete: 0
+    - type: 1
+      description: "\uAC10\uD0DC"
+      targets:
+      - Gamtae
+      needCount: 2
+      acceptReportsWhenComplete: 0
+    - type: 1
+      description: "\uC0B4\uC624\uC9D5\uC5B4"
+      targets:
+      - Squid
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
   rewards: []
-  useAutoComplete: 1
-  isCancelable: 0
-  isSavable: 0
-  isNotifier: 1
-  isCount: 0
-  acceptionConditions:
-  - {fileID: 11400000, guid: 98208f705966a3f4db3c3ddd8cf798ee, type: 2}
-  cancelConditions: []
+  prerequisite: {fileID: 11400000, guid: 00abf8d805e3f2f4694b66ba10216680, type: 2}
+  timeLimitSeconds: 0
+  showNotification: 1

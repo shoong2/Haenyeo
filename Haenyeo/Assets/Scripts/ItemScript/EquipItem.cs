@@ -1,7 +1,14 @@
 using UnityEngine;
 
-// 스탯 종류 (스테미나 = UnderSeaGameManager.maxHp, Buff는 아직 미구현/자리만)
-public enum StatType { Stamina, Buff }
+// 스탯 종류. 기획 시트 "리워드 리스트"의 능력치 구분과 같다.
+// 장비의 보유 효과(StatEffect)와 퀘스트 buff 보상(BuffReward)이 같은 값을 쓴다.
+public enum StatType
+{
+    Stamina,     // 스태미나 (= UnderSeaGameManager.maxHp)
+    Attack,      // 공격력
+    RareChance,  // 희귀 확률 증가
+    MoveSpeed    // 이동 속도
+}
 
 // 효과 연산 방식: Add = +값, Percent = %값
 public enum EffectOp { Add, Percent }

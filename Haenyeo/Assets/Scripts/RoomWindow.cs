@@ -11,10 +11,10 @@ public class RoomWindow : MonoBehaviour
     public GameObject[] windows;
     public GameObject won;
     public GameObject seo;
-    public Image panel; // ÆäÀÌµåÀÎ/¾Æ¿ô È¿°ú¸¦ Àû¿ëÇÒ Panel
-    public float fadeDuration = 1.0f; // ÆäÀÌµåÀÎ/¾Æ¿ô¿¡ °É¸®´Â ½Ã°£
+    public Image panel; // ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½/ï¿½Æ¿ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Panel
+    public float fadeDuration = 1.0f; // ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½/ï¿½Æ¿ï¿½ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
 
-    private float currentAlpha = 0.0f; // ÇöÀç ¾ËÆÄ °ª
+    private float currentAlpha = 0.0f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 
     void Start()
     {
@@ -47,11 +47,11 @@ public class RoomWindow : MonoBehaviour
     {
         foreach (var quest in QuestSystem.Instance.ActiveQuests)
         {
-            if (quest.CodeName == "213")
+            if (quest.QuestId == "1_Q_GoSea")
             {
                 won.SetActive(true);
             }
-            else if (quest.CodeName == "123")
+            else if (quest.QuestId == "10_Q_SubQuest")
             {
                 seo.SetActive(true);
             }

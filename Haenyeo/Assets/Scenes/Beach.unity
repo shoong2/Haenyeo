@@ -1945,11 +1945,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 412477bc5d156f540948533e935b47b0, type: 2}
-  target: {fileID: 11400000, guid: 08d1c311dc226c948b06ba923058d30d, type: 2}
-  successCount: 1
+  type: 2
+  targetId: GoBeach
+  count: 1
   colliderTags: []
-  sceneName: Beach
 --- !u!4 &959374533
 Transform:
   m_ObjectHideFlags: 0
@@ -2909,11 +2908,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  target: {fileID: 11400000, guid: e6f0d0441a6771348a3534edb972ef2b, type: 2}
-  successCount: 1
+  type: 0
+  targetId: Yoon
+  count: 1
   colliderTags: []
-  sceneName: 
 --- !u!1 &1728492609
 GameObject:
   m_ObjectHideFlags: 0
@@ -3065,11 +3063,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  target: {fileID: 11400000, guid: 4de7d34d4c52518479d58da7acdf786a, type: 2}
-  successCount: 1
+  type: 0
+  targetId: Dayeong
+  count: 1
   colliderTags: []
-  sceneName: 
 --- !u!1 &1809681611
 GameObject:
   m_ObjectHideFlags: 0
@@ -3263,11 +3260,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 412477bc5d156f540948533e935b47b0, type: 2}
-  target: {fileID: 11400000, guid: 08d1c311dc226c948b06ba923058d30d, type: 2}
-  successCount: 1
+  type: 2
+  targetId: GoBeach
+  count: 1
   colliderTags: []
-  sceneName: 
 --- !u!1 &1965322522
 GameObject:
   m_ObjectHideFlags: 0
@@ -4116,11 +4112,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  target: {fileID: 11400000, guid: 0b51b368f51bd5c4e84a4eb1286c1d7a, type: 2}
-  successCount: 1
+  type: 0
+  targetId: Jaewon
+  count: 1
   colliderTags: []
-  sceneName: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

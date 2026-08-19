@@ -12,26 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
   m_Name: 9_Q_Dialogue7
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  icon: {fileID: 0}
-  codeName: 555
-  displayName: 
-  description: 
-  taskGroups:
-  - tasks:
-    - {fileID: 11400000, guid: c0b2b3637154a764681098addcdaf8c6, type: 2}
-  - tasks:
-    - {fileID: 11400000, guid: 2280ce0de1d8638428fee2a5fd08fba4, type: 2}
-  people:
-  - Room_Player
-  - Won
-  - Seo
+  questId: 9_Q_Dialogue7
+  displayName: ""
+  steps:
+  - objectives:
+    - type: 0
+      description: "\uBBFC\uC11C\uB300\uD654"
+      targets:
+      - Minseo
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
+  - objectives:
+    - type: 4
+      description: "\uC9D1\uC73C\uB85C \uAC00\uC11C \uC7A0\uC790\uAE30"
+      targets:
+      - Bed
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
   rewards: []
-  useAutoComplete: 1
-  isCancelable: 0
-  isSavable: 0
-  isNotifier: 0
-  isCount: 0
-  acceptionConditions:
-  - {fileID: 11400000, guid: 5c12a61dfda48144bb34a9312a12213d, type: 2}
-  cancelConditions: []
+  prerequisite: {fileID: 11400000, guid: 5cad23be0eec70c45b403c1103663f62, type: 2}
+  timeLimitSeconds: 0
+  showNotification: 0

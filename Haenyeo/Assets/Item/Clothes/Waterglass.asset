@@ -21,7 +21,7 @@ MonoBehaviour:
   weaponType: 
   description: "\uC774\uAC83\uC740 \uC218\uACBD\uC774\uB2E4"
   effects:
-  - stat: 1
+  - stat: 2
     op: 0
     value: 10
     description: "\uBC84\uD504 +10"

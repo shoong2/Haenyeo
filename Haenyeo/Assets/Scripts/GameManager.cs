@@ -146,17 +146,16 @@ public class GameManager : MonoBehaviour
                 underSea = true;
                 underGM.storage = this.storage;
 
+                // 제한 시간이 걸린 퀘스트가 진행 중이면 카운트다운을 띄운다
                 foreach (var quest in QuestSystem.Instance.ActiveQuests)
                 {
-                    if (quest.IsCount != 0 && !count.gameObject.activeSelf)
-                    {
-                        count.gameObject.SetActive(true);
-                        countNum = quest.IsCount;
-                        count.text = countNum.ToString();
-                        StartCoroutine(CountDown(countNum, underGM, quest));
+                    if (quest.TimeLimitSeconds <= 0 || count.gameObject.activeSelf)
+                        continue;
 
-                    }
-                    Debug.Log(quest);
+                    count.gameObject.SetActive(true);
+                    countNum = quest.TimeLimitSeconds;
+                    count.text = countNum.ToString();
+                    StartCoroutine(CountDown(countNum, underGM, quest));
                 }
             }
             else
@@ -184,7 +183,10 @@ public class GameManager : MonoBehaviour
 
         this.count.gameObject.SetActive(false);
         gm.Tewak();
-        QuestSystem.Instance.Register(quest);
+
+        // 시간 초과 -> 재도전. Register를 그냥 다시 부르면 진행 중이던 사본이 남아
+        // 같은 퀘스트가 둘 활성화되고, 보고가 중복 처리된다.
+        QuestSystem.Instance.Restart(quest);
 
 
     }

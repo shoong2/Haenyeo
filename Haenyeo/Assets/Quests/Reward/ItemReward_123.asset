@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3dfb59a57834d64b9445eb0f801151e, type: 3}
   m_Name: ItemReward_123
   m_EditorClassIdentifier: 
-  rewardType: 1
   icon: {fileID: 0}
   description: 
   quantity: 1
-  item:
+  items:
   - {fileID: 11400000, guid: a62c6c32cbc82c44492347519da2e193, type: 2}
   - {fileID: 11400000, guid: 47e190ad8b280b247a472b7c08d93e7a, type: 2}
   - {fileID: 11400000, guid: 3d15505b98dd2af45800083469f1d351, type: 2}

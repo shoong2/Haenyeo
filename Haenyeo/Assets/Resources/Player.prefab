@@ -833,8 +833,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4768bfd280dd45f2bf9d31f22a981451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OutfitQuestReporter
-  category: {fileID: 11400000, guid: 0262c4bcd613dbe488ab43f4cb017afd, type: 2}
-  target: {fileID: 11400000, guid: 92b8bf3efcda7ad459d3d053a7210b16, type: 2}
+  type: 3
+  targetId: WearFullSuit
   required:
   - category: armL
     label: C2

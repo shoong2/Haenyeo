@@ -1,34 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 지정한 TaskTarget을 가진 Task가 완료되면 오브젝트를 끈다.
-// (예: 특정 NPC와의 대화 태스크가 끝나면 그 NPC를 비활성화)
+// 지정한 타겟을 가진 목표가 완료되면 오브젝트를 끈다.
+// (예: 특정 NPC와의 대화 목표가 끝나면 그 NPC를 비활성화)
 //
 // 씬을 나갔다 들어와도 계속 꺼져 있다. QuestSystem이 DontDestroyOnLoad라
 // 퀘스트 진행 상태가 메모리에 남아 있고, Start에서 그걸 되짚어 보기 때문.
-// (세이브 파일과는 무관 — 게임을 재시작하면 퀘스트 자체가 초기화된다)
 public class QuestTaskObjectDisabler : MonoBehaviour
 {
+    [Tooltip("이 타겟을 가진 목표를 감시한다")]
     [SerializeField]
-    TaskTarget target;                  // 이 타겟을 가진 Task를 감시한다
+    string targetId;
 
+    [Tooltip("끌 오브젝트들. 비워두면 자기 자신")]
     [SerializeField]
-    GameObject[] objectsToDisable;      // 끌 오브젝트들. 비워두면 자기 자신
+    GameObject[] objectsToDisable;
 
-    // 이벤트 해제용
     readonly List<Quest> watchedQuests = new List<Quest>();
-    readonly List<Task> hookedTasks = new List<Task>();
+    readonly List<QuestObjective> hookedObjectives = new List<QuestObjective>();
 
     void Start()
     {
-        if (target == null)
+        if (string.IsNullOrEmpty(targetId))
         {
-            Debug.LogWarning("[TaskDisabler] target이 비어 있음", this);
+            Debug.LogWarning("[QuestTaskObjectDisabler] targetId가 비어 있음", this);
             return;
         }
 
-        // 씬에 들어온 시점에 이미 끝난 태스크면 바로 끄고 감시도 걸지 않는다
-        if (IsTaskAlreadyComplete())
+        // 씬에 들어온 시점에 이미 끝난 목표면 바로 끄고 감시도 걸지 않는다
+        if (IsObjectiveAlreadyComplete())
         {
             DisableObjects();
             return;
@@ -42,61 +42,55 @@ public class QuestTaskObjectDisabler : MonoBehaviour
     void OnDestroy()
     {
         // QuestSystem은 씬을 넘어 살아남으므로 반드시 끊어줘야 한다.
-        // 단 게임 종료 중에는 Instance가 null을 돌려주므로 확인하고 접근한다.
         var questSystem = QuestSystem.Instance;
         if (questSystem != null)
             questSystem.onQuestRegistered -= TryWatch;
 
         foreach (var quest in watchedQuests)
-            quest.onNewTaskGroup -= OnNewTaskGroup;
-        foreach (var task in hookedTasks)
-            task.onStateChanged -= OnTaskStateChanged;
+            quest.onNewStep -= OnNewStep;
+        foreach (var objective in hookedObjectives)
+            objective.onStateChanged -= OnObjectiveStateChanged;
 
         watchedQuests.Clear();
-        hookedTasks.Clear();
+        hookedObjectives.Clear();
     }
 
-    // 이 타겟을 쓰는 퀘스트면 감시 시작
     void TryWatch(Quest quest)
     {
-        if (!quest.ContainsTarget(target) || watchedQuests.Contains(quest))
+        if (!quest.ContainsTarget(targetId) || watchedQuests.Contains(quest))
             return;
 
         watchedQuests.Add(quest);
-        quest.onNewTaskGroup += OnNewTaskGroup;
+        quest.onNewStep += OnNewStep;
 
-        HookCurrentTask(quest);
+        HookCurrentObjective(quest);
     }
 
-    // 현재 단계에 내 타겟의 Task가 있으면 상태 변화를 구독
-    void HookCurrentTask(Quest quest)
+    void HookCurrentObjective(Quest quest)
     {
-        var task = quest.CurrentTaskGroup.FindTaskByTarget(target);
-        if (task == null)
+        var objective = quest.CurrentStep.FindObjectiveByTarget(targetId);
+        if (objective == null)
             return;
 
-        if (task.IsComplete)
+        if (objective.IsComplete)
         {
             DisableObjects();
             return;
         }
 
-        if (hookedTasks.Contains(task))
+        if (hookedObjectives.Contains(objective))
             return;
 
-        hookedTasks.Add(task);
-        task.onStateChanged += OnTaskStateChanged;
+        hookedObjectives.Add(objective);
+        objective.onStateChanged += OnObjectiveStateChanged;
     }
 
-    void OnNewTaskGroup(Quest quest, TaskGroup currentTaskGroup, TaskGroup prevTaskGroup)
-        => HookCurrentTask(quest);
+    void OnNewStep(Quest quest, QuestStep currentStep, QuestStep prevStep) => HookCurrentObjective(quest);
 
-    void OnTaskStateChanged(Task task, TaskState currentState, TaskState prevState)
+    void OnObjectiveStateChanged(QuestObjective objective, ObjectiveState currentState, ObjectiveState prevState)
     {
-        if (currentState != TaskState.Complete)
-            return;
-
-        DisableObjects();
+        if (currentState == ObjectiveState.Complete)
+            DisableObjects();
     }
 
     void DisableObjects()
@@ -112,58 +106,47 @@ public class QuestTaskObjectDisabler : MonoBehaviour
                 go.SetActive(false);
     }
 
-    #region 이미 완료됐는지 되짚기
-
-    bool IsTaskAlreadyComplete()
+    // 이미 완료된 퀘스트에 이 타겟이 있으면 그 목표도 당연히 끝난 것.
+    // 진행 중이면 현재 단계에 있는지, 지나간 단계에 있었는지 구분해야 한다.
+    bool IsObjectiveAlreadyComplete()
     {
         var questSystem = QuestSystem.Instance;
 
-        // 이미 완료된 퀘스트에 이 타겟이 있으면 그 태스크도 당연히 끝난 것
         foreach (var quest in questSystem.CompletedQuests)
-            if (quest.ContainsTarget(target))
+            if (quest.ContainsTarget(targetId))
                 return true;
 
-        foreach (var achievement in questSystem.CompletedAchievements)
-            if (achievement.ContainsTarget(target))
-                return true;
-
-        // 진행 중인 퀘스트
         foreach (var quest in questSystem.ActiveQuests)
         {
-            if (!quest.ContainsTarget(target))
+            if (!quest.ContainsTarget(targetId))
                 continue;
 
-            var task = quest.CurrentTaskGroup.FindTaskByTarget(target);
-            if (task != null)
+            var objective = quest.CurrentStep.FindObjectiveByTarget(targetId);
+            if (objective != null)
             {
-                if (task.IsComplete)
+                if (objective.IsComplete)
                     return true;
                 continue;   // 현재 단계에서 진행 중 — 아직 안 끝났다
             }
 
-            // 현재 단계에 없다. 지나간 단계에 있었으면 끝난 것,
-            // 아직 오지 않은 뒷 단계면 안 끝난 것이라 구분해야 한다.
-            if (IsInPastTaskGroup(quest))
+            if (IsInPastStep(quest))
                 return true;
         }
 
         return false;
     }
 
-    // 현재 단계보다 앞선 단계에 이 타겟이 있었는지
-    bool IsInPastTaskGroup(Quest quest)
+    bool IsInPastStep(Quest quest)
     {
-        foreach (var group in quest.TaskGroups)
+        foreach (var step in quest.Steps)
         {
             // 현재 단계에 도달했다면 그 앞에는 없었다는 뜻
-            if (ReferenceEquals(group, quest.CurrentTaskGroup))
+            if (ReferenceEquals(step, quest.CurrentStep))
                 return false;
 
-            if (group.ContainsTarget(target))
+            if (step.ContainsTarget(targetId))
                 return true;
         }
         return false;
     }
-
-    #endregion
 }
