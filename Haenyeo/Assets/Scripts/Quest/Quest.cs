@@ -23,6 +23,7 @@ public class Quest : ScriptableObject
     public delegate void CompletedHandler(Quest quest);
     public delegate void CanceledHandler(Quest quest);
     public delegate void NewTaskGroupHandler(Quest quest, TaskGroup currentTaskGroup, TaskGroup prevTaskGroup);
+    public delegate void RewardsGivenHandler(Quest quest, IReadOnlyList<Reward> rewards);
     #endregion
     [SerializeField]
     Category category;
@@ -91,6 +92,7 @@ public class Quest : ScriptableObject
     public event CompletedHandler onCompleted;
     public event CanceledHandler onCanceled;
     public event NewTaskGroupHandler onNewTaskGroup;
+    public event RewardsGivenHandler onRewardsGiven;   // 단계(TaskGroup) 보상이 지급될 때 발동
 
     public void OnRegister()
     {
@@ -115,7 +117,7 @@ public class Quest : ScriptableObject
         if (IsComplete)
             return;
 
-        if (category == "DIALOGUE")  //���⼭ ��ȭ �ε��� ������Ʈ
+        if (category == "DIALOGUE")  //���⼭ ��ȭ �ε��� ������Ʈ
         {
             Debug.Log("update");
             GameManager.instance.storage.saveData.nowIndex++;
@@ -136,6 +138,9 @@ public class Quest : ScriptableObject
                 Debug.Log("here is task end");
                 var prevTaskGroup = taskGroups[currentTaskGroupIndex++];
                 prevTaskGroup.End();
+                prevTaskGroup.GiveRewards(this);   // 방금 끝난 단계의 보상 지급 (예: 대화1 후 고무옷/수경/오리발)
+                if (prevTaskGroup.Rewards.Count > 0)
+                    onRewardsGiven?.Invoke(this, prevTaskGroup.Rewards);   // 알림창용 이벤트
                 CurrentTaskGroup.Start();
                 onNewTaskGroup?.Invoke(this, CurrentTaskGroup, prevTaskGroup);
             }
@@ -163,6 +168,7 @@ public class Quest : ScriptableObject
         onCompleted = null;
         onCanceled = null;
         onNewTaskGroup = null;
+        onRewardsGiven = null;
     }
 
     public virtual void Cancel()

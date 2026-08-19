@@ -11,12 +11,17 @@ public enum TaskGroupState
 }
 
 [System.Serializable]
-public class TaskGroup 
+public class TaskGroup
 {
     [SerializeField]
     Task[] tasks;
 
+    [Header("Reward")]
+    [SerializeField]
+    Reward[] rewards;   // 이 단계(TaskGroup)를 완료하고 다음 단계로 넘어갈 때 지급되는 보상
+
     public IReadOnlyList<Task> Tasks => tasks;
+    public IReadOnlyList<Reward> Rewards => rewards;
     public Quest Owner { get; set; }
     public bool IsAllTaskComplete => tasks.All(x => x.IsComplete);
     public bool IsComplete => State == TaskGroupState.Complete;
@@ -25,6 +30,7 @@ public class TaskGroup
     public TaskGroup(TaskGroup copytarget)
     {
         tasks = copytarget.Tasks.Select(x => Object.Instantiate(x)).ToArray();
+        rewards = copytarget.rewards;   // Reward는 SO 에셋이라 참조 공유 (Give는 상태를 바꾸지 않음)
     }
     public void Setup(Quest owner)
     {
@@ -67,6 +73,15 @@ public class TaskGroup
             if(!task.IsComplete)
                 task.complete();
         }
+    }
+
+    // 이 단계 완료 시 보상 지급 (다음 단계로 넘어갈 때 Quest가 호출)
+    public void GiveRewards(Quest owner)
+    {
+        if (rewards == null) return;
+        foreach (var reward in rewards)
+            if (reward != null)
+                reward.Give(owner);
     }
 
     public Task FindTaskByTarget(object target) => tasks.FirstOrDefault(x => x.ContainsTarget(target));

@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class QuestTargetMarker : MonoBehaviour
 {
-    //TryAddTargetQuest �Լ����� ����Ʈ�� �ִ� ��� Ÿ���� ��ȸ�� �� ��Ȱ��ȭ ���ִ� ����� ��ȸ�� �ż�
-    //�и����Ѽ� �� ��� �����ϱ�
+    //TryAddTargetQuest �Լ����� ����Ʈ�� �ִ� ��� Ÿ���� ��ȸ�� �� ��Ȱ��ȭ ���ִ� ����� ��ȸ�� �ż�
+    //�и����Ѽ� �� ��� �����ϱ�
 
 
     [SerializeField]
@@ -19,7 +19,6 @@ public class QuestTargetMarker : MonoBehaviour
     //Transform cameraTransform;
     //Renderer renderer;
 
-    int currentRunningTargetTaskCount;
 
     private void Awake()
     {
@@ -50,7 +49,13 @@ public class QuestTargetMarker : MonoBehaviour
 
     void ClearEvent()
     {
-        QuestSystem.Instance.onQuestRegistered -= TryAddTargetQuest;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        // 게임 종료 중에는 Instance가 null을 돌려주므로 확인하고 접근한다
+        var questSystem = QuestSystem.Instance;
+        if (questSystem != null)
+            questSystem.onQuestRegistered -= TryAddTargetQuest;
+
         foreach ((Quest quest, Task task) in targetTasksByQuest)
         {
             quest.onNewTaskGroup -= UpdateTargetTask;
@@ -73,7 +78,6 @@ public class QuestTargetMarker : MonoBehaviour
 
     void UpdateTargetTask(Quest quest, TaskGroup currentTaskGroup, TaskGroup prevTaskGroup = null)
     {
-        Debug.Log("�߻�");
         targetTasksByQuest.Remove(quest);
 
         var task = currentTaskGroup.FindTaskByTarget(target);
@@ -82,31 +86,36 @@ public class QuestTargetMarker : MonoBehaviour
             targetTasksByQuest[quest] = task;
             task.onStateChanged += UpdateRunningTargetTaskCount;
 
-            UpdateRunningTargetTaskCount(task, task.State);
+            RefreshMarker();
         }
     }
 
-    void RemoveTargetQuest(Quest quest) => targetTasksByQuest.Remove(quest);
+    void RemoveTargetQuest(Quest quest)
+    {
+        targetTasksByQuest.Remove(quest);
+        RefreshMarker();
+    }
 
     void UpdateRunningTargetTaskCount(Task task, TaskState currentState, TaskState prevState = TaskState.Inactive)
     {
-        Debug.Log(currentState);
-        if (currentState == TaskState.Running)
+        //renderer.material = markerMaterialDatas.First(x => x.category == task.Category).markerMatrial;
+        RefreshMarker();
+    }
+
+    // 이벤트가 올 때마다 증감을 누적하면 값이 어긋난다.
+    // (초기 상태가 Running이 아니면 -1이 되고, Task.State는 값이 안 바뀌어도 매번 이벤트를 쏘기 때문에
+    //  Running -> Running 이 반복되면 계속 증가한다)
+    // 그래서 델타를 쌓지 않고 매번 실제 상태를 다시 센다.
+    void RefreshMarker()
+    {
+        int runningCount = 0;
+        foreach (var pair in targetTasksByQuest)
         {
-            //renderer.material = markerMaterialDatas.First(x => x.category == task.Category).markerMatrial;
-            currentRunningTargetTaskCount++;
+            if (pair.Value.State == TaskState.Running)
+                runningCount++;
         }
-        else
-            currentRunningTargetTaskCount--;
 
-
-        gameObject.SetActive(currentRunningTargetTaskCount != 0); //true
-
-        if (currentRunningTargetTaskCount == 0)
-        {
-            Debug.Log("Destroy");
-            Destroy(gameObject);
-        }
+        gameObject.SetActive(runningCount > 0);
     }
 
     [System.Serializable]

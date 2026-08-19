@@ -19,8 +19,6 @@ MonoBehaviour:
   description: 231
   taskGroups:
   - tasks:
-    - {fileID: 11400000, guid: 271c541c20dd329499a93d153a292350, type: 2}
-  - tasks:
     - {fileID: 11400000, guid: 4073501c09bbd084e822092f835f19ff, type: 2}
   people:
   - Room_Player

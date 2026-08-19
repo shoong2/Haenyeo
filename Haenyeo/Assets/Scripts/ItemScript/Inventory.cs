@@ -9,6 +9,10 @@ public class Inventory : MonoBehaviour
     //���� �θ�
     //[SerializeField] GameObject go_SlotsParent;
 
+    // 여닫을 패널 본체. 이 스크립트는 항상 활성인 오브젝트에 두고 이것만 껐다 켠다
+    // (비활성 오브젝트는 Awake가 안 돌아서 Instance가 null이 되는 함정 때문)
+    [SerializeField] GameObject go_Panel;
+
     [SerializeField] GameObject go_AllSlotsParent;
     [SerializeField] GameObject go_ClothesSlotsParent;
     [SerializeField] GameObject go_EquipmentSlotsParent;
@@ -90,6 +94,25 @@ public class Inventory : MonoBehaviour
         go_AllSlotsParent.SetActive(category == null);
         go_ClothesSlotsParent.SetActive(category == Item.ItemType.Cloth);
         go_EquipmentSlotsParent.SetActive(category == Item.ItemType.Equipment);
+    }
+
+    // ===== 여닫기 =====
+    // 씬에 있는 버튼은 이 프리팹 안을 인스펙터로 가리킬 수 없으므로,
+    // Inventory.Instance를 통해 코드로 호출한다. (OpenInventoryButton 참고)
+    public void Open() => SetPanel(true);
+
+    public void Close() => SetPanel(false);
+
+    public void Toggle() => SetPanel(go_Panel == null || !go_Panel.activeSelf);
+
+    void SetPanel(bool on)
+    {
+        if (go_Panel == null)
+        {
+            Debug.LogWarning("[Inventory] go_Panel이 연결되지 않았습니다", this);
+            return;
+        }
+        go_Panel.SetActive(on);
     }
 
     // ===== ����/�ε� ���� (���� �� ������ ȣȯ ����) =====

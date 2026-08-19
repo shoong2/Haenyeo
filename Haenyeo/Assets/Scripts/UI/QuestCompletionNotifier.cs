@@ -36,6 +36,7 @@ public class QuestCompletionNotifier : MonoBehaviour
         var questSystem = QuestSystem.Instance;
         questSystem.onQuestCompleted += Notify;
         questSystem.onAchievementCompleted += Notify;
+        questSystem.onRewardsGiven += NotifyReward;   // 단계(TaskGroup) 보상 알림
 
         //gameObject.SetActive(false);
     }
@@ -47,6 +48,7 @@ public class QuestCompletionNotifier : MonoBehaviour
         {
             questSystem.onQuestCompleted -= Notify;
             questSystem.onAchievementCompleted -= Notify;
+            questSystem.onRewardsGiven -= NotifyReward;
         }
     }
 
@@ -61,12 +63,23 @@ public class QuestCompletionNotifier : MonoBehaviour
             StartCoroutine(ShowNotice());
         }
 
+        // 퀘스트 완료 시점의 보상(Quest.rewards)은 여기서 표시
         if (!rewardNoti.activeSelf && quest.Rewards.Count!=0)
         {
-            Debug.Log(quest.Rewards);
-            Debug.Log("have reward");
             rewardNoti.SetActive(true);
-            StartCoroutine(ShowNoticeReward(quest));
+            StartCoroutine(ShowNoticeReward(quest.Rewards));
+        }
+    }
+
+    // 단계(TaskGroup) 보상 지급 시 보상 알림창 표시
+    void NotifyReward(Quest quest, IReadOnlyList<Reward> rewards)
+    {
+        if (rewards == null || rewards.Count == 0) return;
+
+        if (!rewardNoti.activeSelf)
+        {
+            rewardNoti.SetActive(true);
+            StartCoroutine(ShowNoticeReward(rewards));
         }
     }
 
@@ -98,35 +111,32 @@ public class QuestCompletionNotifier : MonoBehaviour
         //gameObject.SetActive(false);
     }
 
-    IEnumerator ShowNoticeReward(Quest quest)
+    IEnumerator ShowNoticeReward(IReadOnlyList<Reward> rewards)
     {
         SoundManager.instance.PlaySE("Reward");
         var waitSeconds = new WaitForSeconds(showTime);
 
-        if(quest.Rewards[0].rewardType.ToString() =="Item")
+        if(rewards[0].rewardType.ToString() =="Item")
         {
             rewardText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,-98);
-            rewardText.text = "�������� ȹ���߽��ϴ�!";
+            rewardText.text = "아이템을 획득했습니다!";
         }
-        else if(quest.Rewards[0].rewardType.ToString() == "XP")
+        else if(rewards[0].rewardType.ToString() == "XP")
         {
             rewardText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-            rewardText.text = "��� �ɷ�ġ�� ����߽��ϴ�! ";
+            rewardText.text = "능력치가 상승했습니다!";
         }
 
-
-        //Quest quest;
 
         foreach (GameObject box in rewardBox)
         {
             box.SetActive(false);
         }
 
-        for (int i = 0; i < quest.Rewards[0].item.Length; i++)
+        for (int i = 0; i < rewards[0].item.Length; i++)
         {
-            Debug.Log(i);
             rewardBox[i].SetActive(true);
-            rewardBox[i].transform.GetChild(0).GetComponent<Image>().sprite = quest.Rewards[0].item[i].itemImage;
+            rewardBox[i].transform.GetChild(0).GetComponent<Image>().sprite = rewards[0].item[i].itemImage;
         }
 
 

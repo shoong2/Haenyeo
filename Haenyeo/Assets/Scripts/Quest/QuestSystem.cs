@@ -54,6 +54,7 @@ public class QuestSystem : MonoBehaviour
     public event QuestRegisteredHandler onQuestRegistered;
     public event QuestCompletedHandler onQuestCompleted;
     public event QuestCanceledHandler onQuestCanceled;
+    public event Quest.RewardsGivenHandler onRewardsGiven;   // 단계 보상 지급 알림 중계
 
     public event QuestRegisteredHandler onAchievementRegistered;
     public event QuestCompletedHandler onAchievementCompleted;
@@ -91,6 +92,7 @@ public class QuestSystem : MonoBehaviour
         if(newQuest is Achievement)
         {
             newQuest.onCompleted += OnAchievementCompleted;
+            newQuest.onRewardsGiven += OnRewardsGiven;
 
             activeAchievements.Add(newQuest);
 
@@ -102,6 +104,7 @@ public class QuestSystem : MonoBehaviour
         {
             newQuest.onCompleted += OnQuestCompleted;
             newQuest.onCanceled += OnQuestCanceled;
+            newQuest.onRewardsGiven += OnRewardsGiven;
 
             activeQuests.Add(newQuest);
             Debug.Log("Register Quest kkkk");
@@ -223,6 +226,9 @@ public class QuestSystem : MonoBehaviour
 
         onQuestCompleted?.Invoke(quest);
     }
+
+    void OnRewardsGiven(Quest quest, IReadOnlyList<Reward> rewards)
+        => onRewardsGiven?.Invoke(quest, rewards);
 
     void OnQuestCanceled(Quest quest)
     {
