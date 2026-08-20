@@ -59,12 +59,17 @@ public class ToolSlotBar : MonoBehaviour
             SetIcon(icons[i], null);
     }
 
+    // 아이콘만 숨긴다. 프레임(Box)은 그대로 남는다.
+    // 오브젝트째 꺼둔 경우와 컴포넌트만 꺼둔 경우를 모두 되살릴 수 있게 둘 다 건드린다.
     static void SetIcon(Image image, Sprite sprite)
     {
         if (image == null)
             return;
 
+        bool show = sprite != null;
+
         image.sprite = sprite;
-        image.enabled = sprite != null;   // 아이콘만 숨긴다. 프레임은 그대로 남는다
+        image.enabled = show;
+        image.gameObject.SetActive(show);
     }
 }
