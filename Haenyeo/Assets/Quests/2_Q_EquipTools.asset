@@ -10,21 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
-  m_Name: 2_Q_Dialogue1
+  m_Name: 2_Q_EquipTools
   m_EditorClassIdentifier: 
-  questId: 2_Q_Dialogue1
-  displayName: ""
+  questId: 2_Q_Tools
+  displayName: "\uB3C4\uAD6C \uCC29\uC6A9\uD558\uAE30"
+  sheetId: q_tuto_3
   steps:
   - objectives:
     - type: 0
-      description: "\uC7AC\uC6D0\uACFC \uB300\uD654\uD558\uAE30_"
+      description: 1
       targets:
       - Jaewon
       needCount: 1
       acceptReportsWhenComplete: 0
+    rewards:
+    - {fileID: 11400000, guid: 6df72cf9e35cf3148ba9a63a2e780960, type: 2}
+  - objectives:
+    - type: 3
+      description: "\uB3C4\uAD6C \uCC29\uC6A9\uD558\uAE30 "
+      targets:
+      - EquipAllTools
+      needCount: 1
+      acceptReportsWhenComplete: 0
     rewards: []
-  rewards:
-  - {fileID: 11400000, guid: 6df72cf9e35cf3148ba9a63a2e780960, type: 2}
+  rewards: []
   prerequisite: {fileID: 11400000, guid: 4a87426b9f83f594fb7fd517f820cf83, type: 2}
   timeLimitSeconds: 0
   showNotification: 0

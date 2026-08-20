@@ -713,6 +713,7 @@ GameObject:
   - component: {fileID: 2380783225656326983}
   - component: {fileID: 6197632667956746918}
   - component: {fileID: 8714468751745408986}
+  - component: {fileID: 8714468751745408987}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -832,7 +833,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4768bfd280dd45f2bf9d31f22a981451, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OutfitQuestReporter
+  m_EditorClassIdentifier: Assembly-CSharp::EquipQuestReporter
   type: 3
   targetId: WearFullSuit
   required:
@@ -852,6 +853,25 @@ MonoBehaviour:
     label: F1
   - category: glassB
     label: G1
+--- !u!114 &8714468751745408987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380783225113276192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4768bfd280dd45f2bf9d31f22a981451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquipQuestReporter
+  type: 3
+  targetId: EquipAllTools
+  requiredParts: []
+  requiredItems:
+  - {fileID: 11400000, guid: 1df0a82bb51aa6d4eb7bbb3d484cfdfb, type: 2}
+  - {fileID: 11400000, guid: b02237d5d62a6d34fa82c1e0fb10abd3, type: 2}
+  - {fileID: 11400000, guid: 6fac8cb15e84d0149b9b623e141cebf1, type: 2}
 --- !u!1 &2380783225302717308
 GameObject:
   m_ObjectHideFlags: 0
