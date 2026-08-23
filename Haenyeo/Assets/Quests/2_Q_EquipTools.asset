@@ -36,4 +36,4 @@ MonoBehaviour:
   rewards: []
   prerequisite: {fileID: 11400000, guid: 4a87426b9f83f594fb7fd517f820cf83, type: 2}
   timeLimitSeconds: 0
-  showNotification: 0
+  showNotification: 1
