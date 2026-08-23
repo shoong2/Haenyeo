@@ -97,7 +97,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7e4967d318a6e47a969d912b7610e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  markerMaterialDatas:
-  - category: {fileID: 0}
-    markerMatrial: {fileID: 0}
+  targetId: 

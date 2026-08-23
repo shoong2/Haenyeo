@@ -1,26 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using Newtonsoft.Json.Linq;
+using UnityEngine;
 
+// 진행 중 / 완료된 퀘스트를 들고 있으면서 보고를 각 퀘스트로 흘려보낸다.
+//
+// 저장/로드는 없다. 예전에는 Save()가 있었지만 호출하는 곳이 하나도 없어서
+// 항상 죽은 코드였고, 새 데이터 구조에 맞춰 다시 설계할 예정이다.
 public class QuestSystem : MonoBehaviour
 {
-    #region Save Path
-    const string kSaveRootPath = "questSystem";
-    const string kActiveQuestsSavePath = "activeQuests";
-    const string kCompletedQuestsSavePath = "completedQuests";
-    const string kActiveAchievementsSavePath = "activeAchievements";
-    const string kCompletedAchievementsPath = "completedAchievements";
-    #endregion
-
-
     #region Events
-    public delegate void QuestRegisteredHandler(Quest newQuest);
+    public delegate void QuestRegisteredHandler(Quest quest);
     public delegate void QuestCompletedHandler(Quest quest);
-    public delegate void QuestCanceledHandler(Quest quest);
+    public delegate void QuestUnregisteredHandler(Quest quest);
     #endregion
-
 
     static QuestSystem instance;
     static bool isApplicationQuitting;
@@ -29,193 +21,98 @@ public class QuestSystem : MonoBehaviour
     {
         get
         {
-            if(!isApplicationQuitting && instance ==null)
+            if (isApplicationQuitting)
+                return null;
+
+            if (instance == null)
             {
                 instance = FindObjectOfType<QuestSystem>();
-                if(instance ==null)
+                if (instance == null)
                 {
                     instance = new GameObject("Quest System").AddComponent<QuestSystem>();
                     DontDestroyOnLoad(instance.gameObject);
                 }
             }
             return instance;
-        } 
+        }
     }
 
-    List<Quest> activeQuests = new List<Quest>();
-    List<Quest> completedQuests = new List<Quest>();
-
-    List<Quest> activeAchievements = new List<Quest>();
-    List<Quest> completedAchievements = new List<Quest>();
-
-    QuestDatabase questDatabase;
-    QuestDatabase achievementDatabase;
+    readonly List<Quest> activeQuests = new List<Quest>();
+    readonly List<Quest> completedQuests = new List<Quest>();
 
     public event QuestRegisteredHandler onQuestRegistered;
     public event QuestCompletedHandler onQuestCompleted;
-    public event QuestCanceledHandler onQuestCanceled;
-
-    public event QuestRegisteredHandler onAchievementRegistered;
-    public event QuestCompletedHandler onAchievementCompleted;
+    public event QuestUnregisteredHandler onQuestUnregistered;
+    public event Quest.RewardsGivenHandler onRewardsGiven;
 
     public IReadOnlyList<Quest> ActiveQuests => activeQuests;
     public IReadOnlyList<Quest> CompletedQuests => completedQuests;
-    public IReadOnlyList<Quest> ActiveAchivements => activeAchievements;
-    public IReadOnlyList<Quest> CompletedAchievements => completedAchievements;
 
-    private void Awake()
-    {
-        questDatabase = Resources.Load<QuestDatabase>("QuestDatabase");
-        achievementDatabase = Resources.Load<QuestDatabase>("AchievementDatabase");
-
-        foreach (var achievement in achievementDatabase.Quests)
-            Register(achievement);
-
-        if(!Load())
-        {
-            foreach (var achievement in achievementDatabase.Quests)
-                Register(achievement);
-        }
-    }
-
-    private void OnApplicationQuit()
-    {
-        isApplicationQuitting = true;
-    }
+    void OnApplicationQuit() => isApplicationQuitting = true;
 
     public Quest Register(Quest quest)
     {
-        Debug.Log("register!!!");
+        if (quest == null)
+            return null;
+
+        // 같은 퀘스트를 두 번 등록하면 사본이 둘 다 살아남아 보고가 중복 처리된다.
+        if (IsActive(quest))
+        {
+            Debug.LogWarning($"[QuestSystem] 이미 진행 중입니다: {quest.QuestId}");
+            return null;
+        }
+
         var newQuest = quest.Clone();
 
-        if(newQuest is Achievement)
-        {
-            newQuest.onCompleted += OnAchievementCompleted;
+        newQuest.onCompleted += OnQuestCompleted;
+        newQuest.onRewardsGiven += OnRewardsGiven;
 
-            activeAchievements.Add(newQuest);
-
-            newQuest.OnRegister();
-
-            onAchievementRegistered?.Invoke(newQuest);
-        }
-        else
-        {
-            newQuest.onCompleted += OnQuestCompleted;
-            newQuest.onCanceled += OnQuestCanceled;
-
-            activeQuests.Add(newQuest);
-            Debug.Log("Register Quest kkkk");
-            newQuest.OnRegister();
-            onQuestRegistered?.Invoke(newQuest);
-           // if (newQuest.Category == "DIALOGUE")
-              //  GameManager.instance.storage.saveData.nowIndex++;
-        }
+        activeQuests.Add(newQuest);
+        newQuest.OnRegister();
+        onQuestRegistered?.Invoke(newQuest);
 
         return newQuest;
     }
 
-    public void ReceiveReport(string category, object target, int successCount)
+    // 제한 시간을 넘겼을 때의 재도전.
+    // 예전에는 진행 중인 사본을 놔둔 채 Register를 또 불러서 같은 퀘스트가 둘 활성화됐다.
+    public Quest Restart(Quest activeQuest)
     {
-        ReceiveReport(activeQuests, category, target, successCount);
-        ReceiveReport(activeAchievements, category, target, successCount);
+        if (activeQuest == null)
+            return null;
+
+        var source = activeQuest.Source != null ? activeQuest.Source : activeQuest;
+
+        Unregister(activeQuest);
+        return Register(source);
     }
 
-    public void ReceiveReport(Category category, TaskTarget target, int successCount)
-        => ReceiveReport(category.CodeName, target.Value, successCount);
-
-    void ReceiveReport(List<Quest> quests, string category, object target, int successCount)
+    public void Unregister(Quest activeQuest)
     {
-        foreach(var quest in quests.ToArray())
-        {
-            quest.ReceiveReport(category, target, successCount);
-        }
+        if (activeQuest == null || !activeQuests.Remove(activeQuest))
+            return;
+
+        activeQuest.Abandon();
+        onQuestUnregistered?.Invoke(activeQuest);
+
+        Destroy(activeQuest, Time.deltaTime);
     }
 
-    public void CompleteWaitingQuests()
+    public void ReceiveReport(ObjectiveType type, string target, int count)
     {
-        foreach(var quest in activeQuests.ToList())
-        {
-            if (quest.IsCompletable)
-                quest.Complete();
-        }
+        // 보고 처리 중에 퀘스트가 완료돼 목록이 바뀔 수 있으므로 사본을 순회한다.
+        foreach (var quest in activeQuests.ToArray())
+            quest.ReceiveReport(type, target, count);
     }
 
-    public bool ContainsInactiveQuests(Quest quest) => activeQuests.Any(x => x.CodeName == quest.CodeName);
-    public bool ContainsInCompletedQuests(Quest quest) => completedQuests.Any(x => x.CodeName == quest.CodeName);
-    public bool ContainsInactiveAchievements(Quest quest) => activeAchievements.Any(x => x.CodeName == quest.CodeName);
-    public bool ContainsInCompletedAchievements(Quest quest) => completedAchievements.Any(x => x.CodeName == quest.CodeName);
+    public bool IsActive(Quest quest)
+        => quest != null && activeQuests.Any(x => x.QuestId == quest.QuestId);
 
-    public void Save()
-    {
-        var root = new JObject();
-        root.Add(kActiveQuestsSavePath, CreateSaveDatas(activeQuests));
-        root.Add(kCompletedQuestsSavePath, CreateSaveDatas(completedQuests));
-        root.Add(kActiveAchievementsSavePath, CreateSaveDatas(activeAchievements));
-        root.Add(kCompletedAchievementsPath, CreateSaveDatas(completedAchievements));
+    public bool IsCompleted(Quest quest)
+        => quest != null && completedQuests.Any(x => x.QuestId == quest.QuestId);
 
-        PlayerPrefs.SetString(kSaveRootPath, root.ToString());
-        PlayerPrefs.Save();
-    }
+    public bool IsRegisteredOrCompleted(Quest quest) => IsActive(quest) || IsCompleted(quest);
 
-    public bool Load()
-    {
-        if (PlayerPrefs.HasKey(kSaveRootPath))
-        {
-            var root = JObject.Parse(PlayerPrefs.GetString(kSaveRootPath));
-
-            LoadSaveDatas(root[kActiveQuestsSavePath], questDatabase, LoadActiveQuest);
-            LoadSaveDatas(root[kCompletedQuestsSavePath], questDatabase, LoadCompleteQuest);
-
-            LoadSaveDatas(root[kActiveAchievementsSavePath], questDatabase, LoadActiveQuest);
-            LoadSaveDatas(root[kCompletedAchievementsPath], questDatabase, LoadCompleteQuest);
-
-            return true;
-        }
-        else
-            return false;
-    }
-
-    JArray CreateSaveDatas(IReadOnlyList<Quest> quests)
-    {
-        var saveDatas = new JArray();
-        foreach(var quest in quests)
-        {
-            if(quest.IsSavable)
-                saveDatas.Add(JObject.FromObject(quest.ToSaveData()));
-        }
-        return saveDatas;
-    }
-
-    void LoadSaveDatas(JToken datasToken, QuestDatabase database, System.Action<QuestSavaData, Quest> onSuccess)
-    {
-        var datas = datasToken as JArray;
-        foreach(var data in datas)
-        {
-            var saveData = data.ToObject<QuestSavaData>();
-            var quest = database.FindQuestBy(saveData.codeName);
-            onSuccess.Invoke(saveData, quest);
-        }
-    }
-
-    void LoadActiveQuest(QuestSavaData savedata, Quest quest)
-    {
-        var newQuest = Register(quest);
-        newQuest.LoadFrom(savedata);
-    }
-
-    void LoadCompleteQuest(QuestSavaData savedata, Quest quest)
-    {
-        var newQuest = quest.Clone();
-        newQuest.LoadFrom(savedata);
-
-        if (newQuest is Achievement)
-            completedAchievements.Add(newQuest);
-        else
-            completedQuests.Add(newQuest);
-    }
-
-
-    #region Callback
     void OnQuestCompleted(Quest quest)
     {
         activeQuests.Remove(quest);
@@ -224,20 +121,6 @@ public class QuestSystem : MonoBehaviour
         onQuestCompleted?.Invoke(quest);
     }
 
-    void OnQuestCanceled(Quest quest)
-    {
-        activeQuests.Remove(quest);
-        onQuestCanceled?.Invoke(quest);
-
-        Destroy(quest, Time.deltaTime);
-    }
-
-    void OnAchievementCompleted(Quest achievement)
-    {
-        activeAchievements.Remove(achievement);
-        completedAchievements.Add(achievement);
-
-        onAchievementCompleted?.Invoke(achievement);
-    }
-    #endregion
+    void OnRewardsGiven(Quest quest, IReadOnlyList<Reward> rewards)
+        => onRewardsGiven?.Invoke(quest, rewards);
 }

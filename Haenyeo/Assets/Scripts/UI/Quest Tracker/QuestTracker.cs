@@ -1,99 +1,97 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+using UnityEngine;
+using UnityEngine.Serialization;
+
+// 퀘스트 하나의 진행 상황을 화면에 띄운다. 단계가 넘어가면 지난 목표에 취소선을 긋는다.
 public class QuestTracker : MonoBehaviour
 {
     [SerializeField]
     TextMeshProUGUI questTitleText;
-    [SerializeField]
-    TaskDescriptor taskDescriptorPrefab;
 
-    Dictionary<Task, TaskDescriptor> taskDescriptorsByTask = new Dictionary<Task, TaskDescriptor>();
+    // 필드 이름을 바꾸면 Unity가 옛 직렬화 데이터를 못 찾아 참조가 빈다.
+    // FormerlySerializedAs 로 옛 이름도 읽게 해준다.
+    [FormerlySerializedAs("taskDescriptorPrefab")]
+    [SerializeField]
+    ObjectiveDescriptor objectiveDescriptorPrefab;
+
+    readonly Dictionary<QuestObjective, ObjectiveDescriptor> descriptorsByObjective
+        = new Dictionary<QuestObjective, ObjectiveDescriptor>();
 
     Quest targetQuest;
 
-    private void OnDestroy()
+    void OnDestroy()
     {
-        if(targetQuest!=null)
+        if (targetQuest != null)
         {
-            targetQuest.onNewTaskGroup -= UpdateTaskDescriptos;
+            targetQuest.onNewStep -= AddDescriptors;
             targetQuest.onCompleted -= DestroySelf;
         }
 
-        foreach(var tuple in taskDescriptorsByTask)
-        {
-            var task = tuple.Key;
-            task.onSuccessChanged -= UpdateText;
-        }
+        foreach (var pair in descriptorsByObjective)
+            pair.Key.onCountChanged -= OnObjectiveCountChanged;
     }
 
-    public void Setup(Quest targetQuest, Color titleColor)
+    public void Setup(Quest quest)
     {
-        Debug.Log(titleColor);
-        this.targetQuest = targetQuest;
-        
-        if (targetQuest.DisplayName != "")
+        targetQuest = quest;
+
+        if (questTitleText != null)
+            questTitleText.text = quest.DisplayName;
+
+        quest.onNewStep += AddDescriptors;
+        quest.onCompleted += DestroySelf;
+
+        // 이미 진행 중인 퀘스트를 뒤늦게 붙잡는 경우(씬 전환 등)를 위해
+        // 첫 단계부터 현재 단계까지 훑으면서 지난 단계는 취소선으로 표시한다.
+        var steps = quest.Steps;
+        AddDescriptors(quest, steps[0]);
+
+        for (int i = 1; i < steps.Count; i++)
         {
-            Debug.Log("display");
-            //questTitleText.text = targetQuest.Category == null ?
-            //    targetQuest.DisplayName :
-            //    $"{targetQuest.DisplayName}";
+            if (ReferenceEquals(steps[i - 1], quest.CurrentStep))
+                break;
 
-                //$"[{ targetQuest.Category.DisplayName}]{ targetQuest.DisplayName}";
+            AddDescriptors(quest, steps[i], steps[i - 1]);
 
-            //questTitleText.color = titleColor;
-        }
-
-        targetQuest.onNewTaskGroup += UpdateTaskDescriptos;
-        targetQuest.onCompleted += DestroySelf;
-
-        var taskGroups = targetQuest.TaskGroups;
-        UpdateTaskDescriptos(targetQuest, taskGroups[0]);
-
-        if(taskGroups[0] != targetQuest.CurrentTaskGroup)
-        {
-            for(int i = 1; i<taskGroups.Count; i++)
-            {
-                var taskGroup = taskGroups[i];
-                UpdateTaskDescriptos(targetQuest, taskGroup, taskGroups[i - 1]);
-
-                if (taskGroup == targetQuest.CurrentTaskGroup)
-                    break;
-            }
+            if (ReferenceEquals(steps[i], quest.CurrentStep))
+                break;
         }
     }
-    void UpdateTaskDescriptos(Quest quest, TaskGroup currentTaskGroup, TaskGroup prevTaskGroup = null)
+
+    void AddDescriptors(Quest quest, QuestStep currentStep, QuestStep prevStep = null)
     {
-        foreach(var task in currentTaskGroup.Tasks)
+        foreach (var objective in currentStep.Objectives)
         {
-            if (task.CodeName != "dialogue")
-            {
-                var taskDescriptor = Instantiate(taskDescriptorPrefab, transform);
-                taskDescriptor.UpdateText(task);
-                task.onSuccessChanged += UpdateText;
+            // 대화 목표는 트래커에 띄우지 않는다 (대사창이 이미 안내한다)
+            if (objective.Type == ObjectiveType.Dialogue)
+                continue;
 
-                taskDescriptorsByTask.Add(task, taskDescriptor);
-            }
+            if (descriptorsByObjective.ContainsKey(objective))
+                continue;
+
+            var descriptor = Instantiate(objectiveDescriptorPrefab, transform);
+            descriptor.UpdateText(objective);
+            objective.onCountChanged += OnObjectiveCountChanged;
+
+            descriptorsByObjective.Add(objective, descriptor);
         }
 
-        if(prevTaskGroup !=  null)
+        if (prevStep == null)
+            return;
+
+        foreach (var objective in prevStep.Objectives)
         {
-            foreach(var task in prevTaskGroup.Tasks)
-            {
-                var taskDescriptor = taskDescriptorsByTask[task];
-                taskDescriptor.UpdateTextUsingStrikeThrough(task);
-            }
+            if (descriptorsByObjective.TryGetValue(objective, out var descriptor))
+                descriptor.UpdateTextUsingStrikeThrough(objective);
         }
     }
-    void UpdateText(Task task, int currentSuccess, int prevSuccess)
+
+    void OnObjectiveCountChanged(QuestObjective objective, int currentCount, int prevCount)
     {
-        taskDescriptorsByTask[task].UpdateText(task);
+        if (descriptorsByObjective.TryGetValue(objective, out var descriptor))
+            descriptor.UpdateText(objective);
     }
 
-    void DestroySelf(Quest quest)
-    {
-        Destroy(gameObject);
-    }
+    void DestroySelf(Quest quest) => Destroy(gameObject);
 }

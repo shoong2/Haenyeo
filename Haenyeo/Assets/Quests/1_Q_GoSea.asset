@@ -12,26 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
   m_Name: 1_Q_GoSea
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 412477bc5d156f540948533e935b47b0, type: 2}
-  icon: {fileID: 0}
-  codeName: 213
+  questId: 1_Q_GoSea
   displayName: "\uBC14\uB2E4\uB85C \uAC00\uBCF4\uAE30"
-  description: 231
-  taskGroups:
-  - tasks:
-    - {fileID: 11400000, guid: 271c541c20dd329499a93d153a292350, type: 2}
-  - tasks:
-    - {fileID: 11400000, guid: 4073501c09bbd084e822092f835f19ff, type: 2}
-  people:
-  - Room_Player
-  - Won
-  - Yeong
-  rewards:
-  - {fileID: 11400000, guid: 764589fa53f01624ca9de176546de5e4, type: 2}
-  useAutoComplete: 1
-  isCancelable: 0
-  isSavable: 0
-  isNotifier: 1
-  isCount: 0
-  acceptionConditions: []
-  cancelConditions: []
+  sheetId: q_tuto_2
+  steps:
+  - objectives:
+    - type: 2
+      description: "\uBC14\uB2E4\uB85C \uAC00\uBCF4\uAE30"
+      targets:
+      - GoBeach
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
+  rewards: []
+  prerequisite: {fileID: 11400000, guid: f595b15b8fc871740bce02cd8dc55619, type: 2}
+  timeLimitSeconds: 0
+  showNotification: 1

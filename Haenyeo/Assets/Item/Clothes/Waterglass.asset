@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c34b41437a458e4898aff2adc7ca35e, type: 3}
+  m_Name: Waterglass
+  m_EditorClassIdentifier: Assembly-CSharp::EquipItem
+  itemName: "\uC218\uACBD"
+  itemType: 0
+  itemImage: {fileID: 21300000, guid: 926db3132dc4e2a40b0c9f492beac7a3, type: 3}
+  itemPrefab: {fileID: 0}
+  per: 0
+  spawnTime: 0
+  weaponType: 
+  description: "\uC774\uAC83\uC740 \uC218\uACBD\uC774\uB2E4"
+  effects:
+  - stat: 2
+    op: 0
+    value: 10
+    description: "\uBC84\uD504 +10"
+  swaps:
+  - category: glassB
+    label: G1

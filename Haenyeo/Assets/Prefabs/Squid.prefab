@@ -503,11 +503,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: a4015bb9c43591c4cbdb3f8d0f2a0c60, type: 2}
-  target: {fileID: 11400000, guid: 5c049d77457ff3047a29a0c2d657780e, type: 2}
-  successCount: 1
+  type: 1
+  targetId: Squid
+  count: 1
   colliderTags: []
-  sceneName: 
 --- !u!1001 &4659883111525621917
 PrefabInstance:
   m_ObjectHideFlags: 0

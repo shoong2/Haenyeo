@@ -12,25 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
   m_Name: 4_Q_Dialogue2
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: 86cbd00f18f933b4a912cca33aa1a795, type: 2}
-  icon: {fileID: 0}
-  codeName: 4321
-  displayName: 
-  description: 
-  taskGroups:
-  - tasks:
-    - {fileID: 11400000, guid: fe783cba3beaf174b8380711ddf36e90, type: 2}
-  people:
-  - Room_Player
-  - Yeong
-  - Won
-  rewards:
-  - {fileID: 11400000, guid: 1d888023b048899428e1a2a6efac61e3, type: 2}
-  useAutoComplete: 1
-  isCancelable: 0
-  isSavable: 0
-  isNotifier: 0
-  isCount: 0
-  acceptionConditions:
-  - {fileID: 11400000, guid: a4e6246a3d72f6f4fad88b0bb30395bb, type: 2}
-  cancelConditions: []
+  questId: 4_Q_Dialogue2
+  displayName: ""
+  steps:
+  - objectives:
+    - type: 0
+      description: "\uB2E4\uC601\uACFC \uB300\uD654"
+      targets:
+      - Dayeong
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
+  rewards: []
+  prerequisite: {fileID: 11400000, guid: a22471550cbece5418e0d3f36cbe683a, type: 2}
+  timeLimitSeconds: 0
+  showNotification: 0

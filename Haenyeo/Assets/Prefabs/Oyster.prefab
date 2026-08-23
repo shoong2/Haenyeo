@@ -298,11 +298,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf2ad55443133d4f9f8a1c009657664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: a4015bb9c43591c4cbdb3f8d0f2a0c60, type: 2}
-  target: {fileID: 11400000, guid: 8661ccf869f79794aa61679e8f899c11, type: 2}
-  successCount: 1
+  type: 1
+  targetId: Squid
+  count: 1
   colliderTags: []
-  sceneName: 
 --- !u!1 &1397355448845928997
 GameObject:
   m_ObjectHideFlags: 0

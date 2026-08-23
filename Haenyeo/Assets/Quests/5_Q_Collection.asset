@@ -12,28 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309731a8c08ce9e44966b29c11df6cb4, type: 3}
   m_Name: 5_Q_Collection
   m_EditorClassIdentifier: 
-  category: {fileID: 11400000, guid: a4015bb9c43591c4cbdb3f8d0f2a0c60, type: 2}
-  icon: {fileID: 0}
-  codeName: 9
+  questId: 5_Q_Collection
   displayName: "\uAE30\uBCF8 \uC7AC\uB8CC \uC218\uC9D1\uD558\uAE30"
-  description: "\uAE30\uBCF8 \uC7AC\uB8CC \uC218\uC9D1\uD558\uAE30"
-  taskGroups:
-  - tasks:
-    - {fileID: 11400000, guid: 9a5acc80b47817f4fbd990254b64bfb1, type: 2}
-  - tasks:
-    - {fileID: 11400000, guid: 65b28ce2073667d41ab9fb549ad7db41, type: 2}
-    - {fileID: 11400000, guid: d3804c1106c240d40b10df64aa267567, type: 2}
-    - {fileID: 11400000, guid: bd3a5ce323a0f32439772e1c8adb6941, type: 2}
-  people:
-  - Room_Player
-  - Won
-  - Yeong
+  sheetId: q_tuto_5
+  steps:
+  - objectives:
+    - type: 0
+      description: talk with Jaewon
+      targets:
+      - Jaewon
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
+  - objectives:
+    - type: 1
+      description: "\uAC10\uD0DC"
+      targets:
+      - Gamtae
+      needCount: 2
+      acceptReportsWhenComplete: 0
+    - type: 1
+      description: "\uC804\uBCF5"
+      targets:
+      - Abalone
+      needCount: 3
+      acceptReportsWhenComplete: 0
+    - type: 1
+      description: "\uC0B4\uC624\uC9D5\uC5B4"
+      targets:
+      - Squid
+      needCount: 1
+      acceptReportsWhenComplete: 0
+    rewards: []
   rewards: []
-  useAutoComplete: 1
-  isCancelable: 0
-  isSavable: 0
-  isNotifier: 1
-  isCount: 0
-  acceptionConditions:
-  - {fileID: 11400000, guid: 4272aaea64c4d1b47b2f162c4cd2c203, type: 2}
-  cancelConditions: []
+  prerequisite: {fileID: 11400000, guid: 4b022b8f9b2c935468f4651658d3448d, type: 2}
+  timeLimitSeconds: 0
+  showNotification: 1

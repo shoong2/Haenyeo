@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
-public class Slot : MonoBehaviour
+public class Slot : MonoBehaviour, IPointerClickHandler
 {
-    public Item item; //È¹µæÇÑ ¾ÆÀÌÅÛ
-    public Image itemImage; // ¾ÆÀÌÅÛÀÇ ÀÌ¹ÌÁö
+    public Item item; //È¹ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Image itemImage; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
     public int itemCount;
 
     [SerializeField]
@@ -15,10 +16,10 @@ public class Slot : MonoBehaviour
     GameObject countImage;
 
     //[SerializeField]
-    //GameObject go_CountImage; // ¾ÆÀÌÅÛ Ä«¿îÆ® ÀÌ¹ÌÁö ÇÊ¿äÇÒ °æ¿ì È°¼ºÈ­
+    //GameObject go_CountImage; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½Æ® ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­
 
 
-    //ÀÌ¹ÌÁö Åõ¸íµµ Á¶Àı
+    //ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     protected void SetColor(float _alpha)
     {
         Color color = itemImage.color;
@@ -27,14 +28,23 @@ public class Slot : MonoBehaviour
     }
 
 
-    //¾ÆÀÌÅÛ È¹µæ
+    // ìŠ¬ë¡¯ í´ë¦­ â†’ ìƒì„¸ í˜ì´ì§€ ì¶œë ¥
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (item == null) return;           // ë¹ˆ ìŠ¬ë¡¯ì€ ë¬´ì‹œ
+        if (ItemDetailPanel.Instance == null) return;
+        ItemDetailPanel.Instance.Show(item);
+    }
+
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¹ï¿½ï¿½
     public virtual void AddItem(Item _item, int _count =1)
     {
         item = _item;
         itemCount = _count;
         itemImage.sprite = item.itemImage;
 
-        if (item.itemType != Item.ItemType.Tool)
+        if (item.itemType == Item.ItemType.item)
         {
             text_Count.text = itemCount.ToString();
             //text_Count.text = "0";
@@ -44,14 +54,16 @@ public class Slot : MonoBehaviour
         }
         else
         {
-            countImage.SetActive(false);
-            text_Count.text = "0";
+            if(countImage!=null)
+                countImage.SetActive(false);
+            //text_Count.text = "0";
+            text_Count.gameObject.SetActive(false);
         }
         SetColor(1);
     }
 
 
-    //¾ÆÀÌÅÛ °³¼ö Á¶Á¤
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void SetSlotCount(int _count)
     {
         itemCount += _count;
@@ -64,7 +76,7 @@ public class Slot : MonoBehaviour
     }
 
 
-    //½½·Ô ÃÊ±âÈ­
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
     void ClearSlot()
     {
         item = null;
